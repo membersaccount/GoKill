@@ -3,7 +3,6 @@
 AGK_CharacterBase::AGK_CharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void AGK_CharacterBase::BeginPlay()
@@ -18,9 +17,13 @@ void AGK_CharacterBase::Tick(float DeltaTime)
 
 }
 
+void AGK_CharacterBase::NotifyControllerChanged()
+{
+	Super::NotifyControllerChanged();
+}
+
 void AGK_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 

@@ -2,7 +2,13 @@
 
 #include "CoreMinimal.h"
 #include "Characters/GK_CharacterBase.h"
+#include <Windows.h>
 #include "GK_Player.generated.h"
+
+class UInputMappingContext;
+class UInputAction;
+struct FInputActionValue;
+class UCameraComponent;
 
 UCLASS()
 class GOKILL_API AGK_Player : public AGK_CharacterBase
@@ -10,5 +16,40 @@ class GOKILL_API AGK_Player : public AGK_CharacterBase
 	GENERATED_BODY()
 	
 public:
+	AGK_Player();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void NotifyControllerChanged() override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void Grab(const FInputActionValue& Value);
+	void Select(const FInputActionValue& Value);
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FollowCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* DefaultMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* GrabAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SelectAction;
 
 };
