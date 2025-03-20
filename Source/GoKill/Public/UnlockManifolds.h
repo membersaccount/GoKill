@@ -33,6 +33,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UCameraComponent* CamComp;
+
+	//virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 };
