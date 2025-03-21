@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Mission.h"
+#include "Missions/Mission.h"
 
 // Sets default values
 AMission::AMission()
