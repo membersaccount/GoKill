@@ -65,13 +65,7 @@ void AGK_Player::Move(const FInputActionValue& Value)
 		return;
 	}
 
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	AddMovementInput(ForwardDirection, MovementVector.Y);
-	AddMovementInput(RightDirection, MovementVector.X);
+    AddMovementInput(FollowCamera->GetForwardVector() * MovementVector.X + FollowCamera->GetRightVector() * MovementVector.Y);
 }
 
 void AGK_Player::Look(const FInputActionValue& Value)
@@ -89,16 +83,12 @@ void AGK_Player::Look(const FInputActionValue& Value)
 
 void AGK_Player::Grab(const FInputActionValue& Value)
 {
-	if (!GEngine)
-		return;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Grab"));
+    Called();
 }
 
 void AGK_Player::Select(const FInputActionValue& Value)
 {
-	if (!GEngine)
-		return;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Select"));
+    Called();
 }
 
 UCameraComponent* AGK_Player::GetPlayerCamera()
