@@ -2,12 +2,22 @@
 
 
 #include "Missions/Mission.h"
+#include "Components/SphereComponent.h"
+#include "Characters/GK_Player.h"
 
 // Sets default values
 AMission::AMission()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// overlap, mesh, ui ì‚¬ì´ì¦ˆ ìœ„ì¹˜ëŠ” ë¸”ë£¨í”„ë¦°íŠ¸ì—ì„œ ì¡°ì •í•´ë³´ê³  ì„¤ì •
+	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
+	OverlapComp->SetupAttachment(RootComponent);
+
+	OverlapComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	OverlapComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+	OverlapComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 }
 
 // Called when the game starts or when spawned
@@ -29,31 +39,31 @@ bool AMission::OverlapEventBegin(AActor* OtherActor)
 	if (bMissionProcessing) return false;
 
 	/*
-	if (OtherActor.IsA<APlayer>()) {
-		auto pl = Cast<APlayer>(OtherActor);
+	if (OtherActor.IsA<AGK_Player>()) {
+		auto pl = Cast<AGK_Player>(OtherActor);
 
-		// 1. ÇÃ·¹ÀÌ¾î ÀÓ¹« ±ÇÇÑ È®ÀÎ
+		// 1. í”Œë ˆì´ì–´ ì„ë¬´ ê¶Œí•œ í™•ì¸
 
-		// 2. ÀÓ¹« ±ÇÇÑÀÌ ¾ø´Â ÇÃ·¹ÀÌ¾îÀÏ °æ¿ì return;
-		if (ÇØ´ç ÇÃ·¹ÀÌ¾îÇÑÅ× ÀÓ¹« ±ÇÇÑÀÌ ¾øÀ½) {
+		// 2. ì„ë¬´ ê¶Œí•œì´ ì—†ëŠ” í”Œë ˆì´ì–´ì¼ ê²½ìš° return;
+		if (í•´ë‹¹ í”Œë ˆì´ì–´í•œí…Œ ì„ë¬´ ê¶Œí•œì´ ì—†ìŒ) {
 			activePlayerId = -1;
 			return;
 		}
-		// ÀÓ¹« ±ÇÇÑÀÌ ÀÖ´Â ÇÃ·¹ÀÌ¾îÀÏ °æ¿ì
-		activePlayerId = pl->playerId; // Æ¯Á¤ ÇÃ·¹ÀÌ¾î ½Äº°ÀÚ
+		// ì„ë¬´ ê¶Œí•œì´ ìˆëŠ” í”Œë ˆì´ì–´ì¼ ê²½ìš°
+		activePlayerId = pl->playerId; // íŠ¹ì • í”Œë ˆì´ì–´ ì‹ë³„ì
 		activePlayer = pl;
 
-		// 3. ÇØ´ç ÇÃ·¹ÀÌ¾îÀÇ ÄÁÆ®·Ñ·¯ ºÒ·¯¿À±â (3¹ø Ç×¸ñÀº VR ¹öÀü¿¡¼­´Â »ı·«µÉµí)
-		auto controller = pl->GetController(); // ÀÌ°Å³ª ¾Æ´Ï¸é ±×³É ->Controller ³ª ¾îÂ·µç ±× ÇÃ·¹ÀÌ¾îÀÇ ÄÁÆ®·Ñ·¯
+		// 3. í•´ë‹¹ í”Œë ˆì´ì–´ì˜ ì»¨íŠ¸ë¡¤ëŸ¬ ë¶ˆëŸ¬ì˜¤ê¸° (3ë²ˆ í•­ëª©ì€ VR ë²„ì „ì—ì„œëŠ” ìƒëµë ë“¯)
+		auto controller = pl->GetController(); // ì´ê±°ë‚˜ ì•„ë‹ˆë©´ ê·¸ëƒ¥ ->Controller ë‚˜ ì–´ì¨Œë“  ê·¸ í”Œë ˆì´ì–´ì˜ ì»¨íŠ¸ë¡¤ëŸ¬
 		if (controller == nullptr) return;
 
-		// 3-1. ÇØ´ç ÇÃ·¹ÀÌ¾îÀÇ ¸¶¿ì½º Ä¿¼­ º¸ÀÌ±â
+		// 3-1. í•´ë‹¹ í”Œë ˆì´ì–´ì˜ ë§ˆìš°ìŠ¤ ì»¤ì„œ ë³´ì´ê¸°
 		controller->bShowMouseCursor = true;
 
-		// 4. ÇÃ·¹ÀÌ¾î°¡ ÀÓ¹« ¼öÇàÁß ¿©ºÎ Ç¥½Ã
+		// 4. í”Œë ˆì´ì–´ê°€ ì„ë¬´ ìˆ˜í–‰ì¤‘ ì—¬ë¶€ í‘œì‹œ
 		bMissionProcessing = true;
 
-		// °øÅë ÀÛ¾÷ÀÌ ÀüºÎ ³¡³¯ °æ¿ì true ¸¦ ¹İÈ¯ÇÏ°í, true ¸¦ ¹İÈ¯¹ŞÀº ¹Ì¼Ç ¾×ÅÍ´Â ·£´ı ¼¼ÆÃ µîÀÇ ÀÛ¾÷À» ÇÑ´Ù
+		// ê³µí†µ ì‘ì—…ì´ ì „ë¶€ ëë‚  ê²½ìš° true ë¥¼ ë°˜í™˜í•˜ê³ , true ë¥¼ ë°˜í™˜ë°›ì€ ë¯¸ì…˜ ì•¡í„°ëŠ” ëœë¤ ì„¸íŒ… ë“±ì˜ ì‘ì—…ì„ í•œë‹¤
 		return true;
 	}
 	*/
@@ -66,20 +76,20 @@ bool AMission::OverlapEventEnd(AActor* OtherActor)
 	if (!bMissionProcessing) return false;
 
 	/*
-	if (OtherActor.IsA<APlayer>()) {
-		auto pl = Cast<APlayer>(OtherActor);
+	if (OtherActor.IsA<AGK_Player>()) {
+		auto pl = Cast<AGK_Player>(OtherActor);
 
-		// ÀÓ¹« ÁøÇàÁßÀÎ ÇÃ·¹ÀÌ¾î°¡ ¾Æ´Ï¸é »ó°ü ¾øÀ½
+		// ì„ë¬´ ì§„í–‰ì¤‘ì¸ í”Œë ˆì´ì–´ê°€ ì•„ë‹ˆë©´ ìƒê´€ ì—†ìŒ
 		if (pl->playerId != activePlayerId) return;
 
-		// 1. ÀÓ¹«ÁßÀÎ ÇÃ·¹ÀÌ¾î ½Äº°ÀÚ ÃÊ±âÈ­
+		// 1. ì„ë¬´ì¤‘ì¸ í”Œë ˆì´ì–´ ì‹ë³„ì ì´ˆê¸°í™”
 		activePlayerId = -1;
 		activePlayer = nullptr;
 
-		// 2. ÀÓ¹« Á¾·á
+		// 2. ì„ë¬´ ì¢…ë£Œ
 		bMissionProcessing = false;
 
-		// °øÅë ÀÛ¾÷ÀÌ ÀüºÎ ³¡³¯ °æ¿ì true ¸¦ ¹İÈ¯ÇÏ°í, true ¸¦ ¹İÈ¯¹ŞÀº ¹Ì¼Ç ¾×ÅÍ´Â ÃÊ±âÈ­ µîÀÇ ÀÛ¾÷À» ÇÑ´Ù. (¹Ì¼ÇÀÌ ¼º°øÀûÀ¸·Î ¿Ï·á µÆÀ» °æ¿ì¸¸ ¹Ì¼Ç ÁøÇàµµ ¿Ã¸®±â ÀØÁö ¸»±â!)
+		// ê³µí†µ ì‘ì—…ì´ ì „ë¶€ ëë‚  ê²½ìš° true ë¥¼ ë°˜í™˜í•˜ê³ , true ë¥¼ ë°˜í™˜ë°›ì€ ë¯¸ì…˜ ì•¡í„°ëŠ” ì´ˆê¸°í™” ë“±ì˜ ì‘ì—…ì„ í•œë‹¤. (ë¯¸ì…˜ì´ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œ ëì„ ê²½ìš°ë§Œ ë¯¸ì…˜ ì§„í–‰ë„ ì˜¬ë¦¬ê¸° ìŠì§€ ë§ê¸°!)
 		return true;
 	}
 	*/
@@ -102,10 +112,9 @@ bool AMission::PlayerAfterDie(int32 playerId)
 void AMission::MissionFocusOn()
 {
 	/*
-	// ÇÃ·¹ÀÌ¾î Ä«¸Ş¶óÀÇ °¢µµ º¯°æ ¹× À§Ä¡ º¯°æ
-	FVector cameraDir = this->GetActorLocation() - activePlayer->Ä«¸Ş¶ó->GetActorLocation();
+	// í”Œë ˆì´ì–´ ì¹´ë©”ë¼ì˜ ê°ë„ ë³€ê²½ ë° ìœ„ì¹˜ ë³€ê²½
+	FVector cameraDir = this->GetActorLocation() - activePlayer->ì¹´ë©”ë¼->GetActorLocation();
 	FRotator cameraRot = cameraDir.Rotation();
-	activePlayer->Ä«¸Ş¶ó->SetRelativeRotation(cameraRot);
+	activePlayer->ì¹´ë©”ë¼->SetRelativeRotation(cameraRot);
 	*/
 }
-

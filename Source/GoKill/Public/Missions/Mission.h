@@ -25,24 +25,30 @@ public:
 
 
 protected:
-	// ¹Ì¼Ç ¾ÆÀÌÅÛÀÌ »ç¿ëÁßÀÎ°¡ ¿©ºÎ
+	// ë¯¸ì…˜ ì•„ì´í…œì´ ì‚¬ìš©ì¤‘ì¸ê°€ ì—¬ë¶€
 	bool bMissionProcessing = false;
 
-	// ¹Ì¼Ç ¾ÆÀÌÅÛÀ» »ç¿ëÁßÀÎ ÇÃ·¹ÀÌ¾îÀÇ ½Äº°ÀÚ
+	// ë¯¸ì…˜ ì•„ì´í…œì„ ì‚¬ìš©ì¤‘ì¸ í”Œë ˆì´ì–´ì˜ ì‹ë³„ìž
 	int32 activePlayerId = -1;
 
-	class AActor* activePlayer; // ³ªÁß¿¡ APlayer °°Àº°É·Î º¯°æ
+	class AGK_Player* activePlayer;
+
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* RootComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USphereComponent* OverlapComp;
 
 public:
-	// ¹Ì¼Ç ¹üÀ§¿¡ overlap µÆÀ» ¶§ °øÅëÀûÀÎ ÀÛ¾÷ : overlap µÈ ÇÃ·¹ÀÌ¾î°¡ ÀÛ¾÷ ½ÃÀÛÇÏ¸é true ¹ÝÈ¯
+	// ë¯¸ì…˜ ë²”ìœ„ì— overlap ëì„ ë•Œ ê³µí†µì ì¸ ìž‘ì—… : overlap ëœ í”Œë ˆì´ì–´ê°€ ìž‘ì—… ì‹œìž‘í•˜ë©´ true ë°˜í™˜
 	virtual bool OverlapEventBegin(AActor* OtherActor);
 
-	// ¹Ì¼Ç ¹üÀ§ÀÇ overlap ÀÌ ³¡³µÀ» ¶§ °øÅëÀûÀÎ ÀÛ¾÷ : overlap ³¡³­ ÇÃ·¹ÀÌ¾î°¡ ÀÛ¾÷ ÁßÀÌ´ø ÇÃ·¹ÀÌ¾î¸é true ¹ÝÈ¯
+	// ë¯¸ì…˜ ë²”ìœ„ì˜ overlap ì´ ëë‚¬ì„ ë•Œ ê³µí†µì ì¸ ìž‘ì—… : overlap ëë‚œ í”Œë ˆì´ì–´ê°€ ìž‘ì—… ì¤‘ì´ë˜ í”Œë ˆì´ì–´ë©´ true ë°˜í™˜
 	virtual bool OverlapEventEnd(AActor* OtherActor);
 
-	// ¹Ì¼Ç ¹üÀ§ ¾È¿¡¼­ ÇÃ·¹ÀÌ¾î°¡ »ç¸ÁÇßÀ» ½Ã ¹Ì¼ÇÁßÀÌ´ø ÇÃ·¹ÀÌ¾î¸é ¹Ì¼Ç Ãë¼Ò ÀÛ¾÷ : Á×Àº ÇÃ·¹ÀÌ¾î°¡ ÀÛ¾÷ ÁßÀÌ´ø ÇÃ·¹ÀÌ¾î¸é true ¹ÝÈ¯
+	// ë¯¸ì…˜ ë²”ìœ„ ì•ˆì—ì„œ í”Œë ˆì´ì–´ê°€ ì‚¬ë§í–ˆì„ ì‹œ ë¯¸ì…˜ì¤‘ì´ë˜ í”Œë ˆì´ì–´ë©´ ë¯¸ì…˜ ì·¨ì†Œ ìž‘ì—… : ì£½ì€ í”Œë ˆì´ì–´ê°€ ìž‘ì—… ì¤‘ì´ë˜ í”Œë ˆì´ì–´ë©´ true ë°˜í™˜
 	virtual bool PlayerAfterDie(int32 playerId);
 
-	// ÇÃ·¹ÀÌ¾î Ä«¸Þ¶ó°¡ ¹Ì¼Ç ¾ÆÀÌÅÛÀ» ÁÖ¸ñÇØ¾ßÇÒÁö´Â ¹Ì¼Ç¸¶´Ù ´Ù¸£±â¿¡ µû·Î ºÐ¸®
+	// í”Œë ˆì´ì–´ ì¹´ë©”ë¼ê°€ ë¯¸ì…˜ ì•„ì´í…œì„ ì£¼ëª©í•´ì•¼í• ì§€ëŠ” ë¯¸ì…˜ë§ˆë‹¤ ë‹¤ë¥´ê¸°ì— ë”°ë¡œ ë¶„ë¦¬
 	virtual void MissionFocusOn();
 };
