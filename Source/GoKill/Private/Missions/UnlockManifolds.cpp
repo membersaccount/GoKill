@@ -53,10 +53,6 @@ void AUnlockManifolds::OnMissionEndOverlap(UPrimitiveComponent* OverlappedCompon
     bool missionEnd = OverlapEventEnd(OtherActor);
 
     if (missionEnd) {
-        // 마우스 버전
-        auto pc = Cast<APlayerController>(activePlayer->GetController());
-        pc->bShowMouseCursor = false;
-
         // 미션 성공일 경우 미션 진행도 늘리기
 
         // 미션 초기화

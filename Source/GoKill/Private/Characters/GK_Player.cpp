@@ -98,7 +98,7 @@ UCameraComponent* AGK_Player::GetPlayerCamera()
 
 FVector AGK_Player::GetCameraLocation()
 {
-    return FollowCamera->GetRelativeLocation();
+    return FollowCamera->GetComponentLocation();
 }
 
 void AGK_Player::SetCameraRotation(FRotator CameraRotation_)
