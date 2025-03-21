@@ -2,6 +2,7 @@
 
 
 #include "Mission.h"
+#include "Components/ShapeComponent.h"
 
 // Sets default values
 AMission::AMission()
@@ -9,6 +10,12 @@ AMission::AMission()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	OverlapComp = CreateDefaultSubobject<UShapeComponent>(TEXT("OverlapComp"));
+	OverlapComp->SetupAttachment(RootComponent);
+
+	OverlapComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	OverlapComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+	OverlapComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +49,7 @@ bool AMission::OverlapEventBegin(AActor* OtherActor)
 		}
 		// 임무 권한이 있는 플레이어일 경우
 		activePlayerId = pl->playerId; // 특정 플레이어 식별자
+		activePlayer = pl;
 
 		// 3. 해당 플레이어의 컨트롤러 불러오기 (3번 항목은 VR 버전에서는 생략될듯)
 		auto controller = pl->GetController(); // 이거나 아니면 그냥 ->Controller 나 어쨌든 그 플레이어의 컨트롤러
@@ -52,8 +60,6 @@ bool AMission::OverlapEventBegin(AActor* OtherActor)
 
 		// 4. 플레이어가 임무 수행중 여부 표시
 		bMissionProcessing = true;
-
-		// 5. 플레이어 카메라 각 액터에 붙어있는 카메라로 전환
 
 		// 공통 작업이 전부 끝날 경우 true 를 반환하고, true 를 반환받은 미션 액터는 랜덤 세팅 등의 작업을 한다
 		return true;
@@ -74,12 +80,11 @@ bool AMission::OverlapEventEnd(AActor* OtherActor)
 		// 임무 진행중인 플레이어가 아니면 상관 없음
 		if (pl->playerId != activePlayerId) return;
 
-		// 1. 플레이어의 카메라를 원래 플레이어의 카메라로 전환
-
-		// 2. 임무중인 플레이어 식별자 초기화
+		// 1. 임무중인 플레이어 식별자 초기화
 		activePlayerId = -1;
+		activePlayer = nullptr;
 
-		// 3. 임무 종료
+		// 2. 임무 종료
 		bMissionProcessing = false;
 
 		// 공통 작업이 전부 끝날 경우 true 를 반환하고, true 를 반환받은 미션 액터는 초기화 등의 작업을 한다. (미션이 성공적으로 완료 됐을 경우만 미션 진행도 올리기 잊지 말기!)
@@ -95,9 +100,20 @@ bool AMission::PlayerAfterDie(int32 playerId)
 	if (playerId == activePlayerId) {
 		bMissionProcessing = false;
 		activePlayerId = -1;
+		activePlayer = nullptr;
 
 		return true;
 	}
 	return false;
+}
+
+void AMission::MissionFocusOn()
+{
+	/*
+	// 플레이어 카메라의 각도 변경 및 위치 변경
+	FVector cameraDir = this->GetActorLocation() - activePlayer->카메라->GetActorLocation();
+	FRotator cameraRot = cameraDir.Rotation();
+	activePlayer->카메라->SetRelativeRotation(cameraRot);
+	*/
 }
 

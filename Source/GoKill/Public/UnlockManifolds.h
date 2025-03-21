@@ -28,11 +28,9 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UShapeComponent* OverlapComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UCameraComponent* CamComp;
+public:
+	UFUNCTION()
+	void OnMissionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };
