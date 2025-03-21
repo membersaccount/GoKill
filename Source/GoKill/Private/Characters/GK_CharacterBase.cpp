@@ -22,3 +22,23 @@ void AGK_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+CharacterState AGK_CharacterBase::GetState()
+{
+    return State;
+}
+
+void AGK_CharacterBase::SetState(CharacterState state_)
+{
+    State = state_;
+}
+
+CharacterMission AGK_CharacterBase::GetMission()
+{
+    return MissionProgress;
+}
+
+void AGK_CharacterBase::SetMission(CharacterMission mission_)
+{
+    MissionProgress = mission_;
+}
+

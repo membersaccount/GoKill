@@ -22,6 +22,10 @@ public:
 
 public:
     int PlayerId = -1;
+    CharacterState GetState();
+    void SetState(CharacterState state_);
+    CharacterMission GetMission();
+    void SetMission(CharacterMission mission_);
 
 protected:
 	CharacterState State;
