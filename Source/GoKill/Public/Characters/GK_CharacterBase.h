@@ -20,6 +20,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+    CharacterState GetState();
+    void SetState(CharacterState state_);
+    CharacterMission GetMission();
+    void SetMission(CharacterMission mission_);
+
 protected:
 	CharacterState State;
 	CharacterMission MissionProgress;
