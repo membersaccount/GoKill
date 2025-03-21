@@ -32,10 +32,6 @@ protected:
 	int32 activePlayerId = -1;
 
 	class AActor* activePlayer; // 나중에 APlayer 같은걸로 변경
-	
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UShapeComponent* OverlapComp;
 
 public:
 	// 미션 범위에 overlap 됐을 때 공통적인 작업 : overlap 된 플레이어가 작업 시작하면 true 반환

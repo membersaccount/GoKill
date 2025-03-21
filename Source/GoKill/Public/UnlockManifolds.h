@@ -27,6 +27,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//class UShapeComponent* OverlapComp;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComp;
 

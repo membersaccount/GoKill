@@ -2,20 +2,12 @@
 
 
 #include "Mission.h"
-#include "Components/ShapeComponent.h"
 
 // Sets default values
 AMission::AMission()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	OverlapComp = CreateDefaultSubobject<UShapeComponent>(TEXT("OverlapComp"));
-	OverlapComp->SetupAttachment(RootComponent);
-
-	OverlapComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	OverlapComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-	OverlapComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 }
 
 // Called when the game starts or when spawned
