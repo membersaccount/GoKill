@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 
@@ -9,7 +9,7 @@
 
 
 
-//#define DEBUGMODE
+#define DEBUGMODE
 
 
 

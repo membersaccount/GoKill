@@ -4,12 +4,16 @@
 #include "Missions/Mission.h"
 #include "Components/SphereComponent.h"
 #include "Characters/GK_Player.h"
+#include "Components/SceneComponent.h"
 
 // Sets default values
 AMission::AMission()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+    RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
+    SetRootComponent(RootComp);
 
 	// overlap, mesh, ui 사이즈 위치는 블루프린트에서 조정해보고 설정
 	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
@@ -52,13 +56,6 @@ bool AMission::OverlapEventBegin(AActor* OtherActor)
 		// 임무 권한이 있는 플레이어일 경우
 		activePlayerId = pl->playerId; // 특정 플레이어 식별자
 		activePlayer = pl;
-
-		// 3. 해당 플레이어의 컨트롤러 불러오기 (3번 항목은 VR 버전에서는 생략될듯)
-		auto controller = pl->GetController(); // 이거나 아니면 그냥 ->Controller 나 어쨌든 그 플레이어의 컨트롤러
-		if (controller == nullptr) return;
-
-		// 3-1. 해당 플레이어의 마우스 커서 보이기
-		controller->bShowMouseCursor = true;
 
 		// 4. 플레이어가 임무 수행중 여부 표시
 		bMissionProcessing = true;
