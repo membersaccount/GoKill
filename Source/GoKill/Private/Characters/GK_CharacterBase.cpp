@@ -1,4 +1,4 @@
-#include "Characters/GK_CharacterBase.h"
+﻿#include "Characters/GK_CharacterBase.h"
 
 AGK_CharacterBase::AGK_CharacterBase()
 {
@@ -15,11 +15,6 @@ void AGK_CharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void AGK_CharacterBase::NotifyControllerChanged()
-{
-	Super::NotifyControllerChanged();
 }
 
 void AGK_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
