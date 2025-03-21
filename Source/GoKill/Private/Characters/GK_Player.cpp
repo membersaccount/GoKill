@@ -1,4 +1,4 @@
-#include "Characters/GK_Player.h"
+﻿#include "Characters/GK_Player.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -8,24 +8,18 @@
 
 #include "shDebug.h"
 
-
 AGK_Player::AGK_Player()
 {
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
-	bUseControllerRotationRoll = false;
-
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+    PrimaryActorTick.bCanEverTick = true;
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->bUsePawnControlRotation = false;
+    FollowCamera->SetupAttachment(RootComponent);
+	FollowCamera->bUsePawnControlRotation = true;
 }
 
 void AGK_Player::BeginPlay()
 {
 	Super::BeginPlay();
-
-	HardTrace();
 }
 
 void AGK_Player::Tick(float DeltaTime)
@@ -33,28 +27,22 @@ void AGK_Player::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AGK_Player::NotifyControllerChanged()
-{
-	Super::NotifyControllerChanged();
-	
-	APlayerController* PlayerController = Cast<APlayerController>(Controller);
-	if (PlayerController == nullptr)
-	{
-		return;
-	}
-
-	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
-	if (Subsystem == nullptr)
-	{
-		return;
-	}
-
-	Subsystem->AddMappingContext(DefaultMappingContext, 0);
-}
-
 void AGK_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+
+    if (PlayerController == nullptr)
+        return;
+
+    UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+    if (Subsystem == nullptr)
+    {
+        return;
+    }
+
+    Subsystem->AddMappingContext(DefaultMappingContext, 1);
 
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (EnhancedInputComponent == nullptr)
@@ -111,4 +99,19 @@ void AGK_Player::Select(const FInputActionValue& Value)
 	if (!GEngine)
 		return;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Select"));
+}
+
+UCameraComponent* AGK_Player::GetPlayerCamera()
+{
+    return FollowCamera;
+}
+
+FVector AGK_Player::GetCameraLocation()
+{
+    return FollowCamera->GetRelativeLocation();
+}
+
+void AGK_Player::SetCameraRotation(FRotator CameraRotation_)
+{
+    FollowCamera->SetWorldRotation(CameraRotation_);
 }
