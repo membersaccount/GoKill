@@ -30,6 +30,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComp;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UWidgetComponent* BtnComp;
+
+    UPROPERTY()
+	class UUnlockManifoldsWidget* BtnWidget;
+
 public:
 	UFUNCTION()
 	void OnMissionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

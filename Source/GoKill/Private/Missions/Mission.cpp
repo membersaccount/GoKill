@@ -92,6 +92,7 @@ bool AMission::OverlapEventEnd(AActor* OtherActor)
 
 		// 2. 임무 종료
 		bMissionProcessing = false;
+        bSuccess = false;
 
 		// 공통 작업이 전부 끝날 경우 true 를 반환하고, true 를 반환받은 미션 액터는 초기화 등의 작업을 한다. (미션이 성공적으로 완료 됐을 경우만 미션 진행도 올리기 잊지 말기! -> 이거는 Player 가 자기가 크루원인지 임포스터인지를 알 수 있게 Get 함수 만들어진 후에 가능)
 		return true;
@@ -128,4 +129,14 @@ void AMission::MissionFocusOn()
     Print(cameraDir.ToString(), FColor::Red);
     //Print(cameraRot.ToString(), FColor::Green);
 	//*/
+}
+
+int32 AMission::GetMissionId()
+{
+    return MissionId;
+}
+
+bool AMission::GetIsSuccess()
+{
+    return bSuccess;
 }
