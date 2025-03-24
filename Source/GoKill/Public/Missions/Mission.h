@@ -25,6 +25,13 @@ public:
 
 
 protected:
+    // 미션 식별자
+    UPROPERTY(VisibleAnywhere)
+    int32 MissionId = 0;
+
+    // 미션이 성공했는가
+    bool bSuccess = false;
+
 	// 미션 아이템이 사용중인가 여부
 	bool bMissionProcessing = false;
 
@@ -40,6 +47,11 @@ protected:
 	class USphereComponent* OverlapComp;
 
 public:
+    // 장소 식별자
+    UPROPERTY(EditAnywhere)
+    int32 LocationId = 0;
+
+public:
 	// 미션 범위에 overlap 됐을 때 공통적인 작업 : overlap 된 플레이어가 작업 시작하면 true 반환
 	virtual bool OverlapEventBegin(AActor* OtherActor);
 
@@ -51,4 +63,10 @@ public:
 
 	// 플레이어 카메라가 미션 아이템을 주목해야할지는 미션마다 다르기에 따로 분리
 	virtual void MissionFocusOn();
+
+    // 미션 식별자 조회
+    int32 GetMissionId();
+
+    // 미션 성공 여부 조회
+    bool GetIsSuccess();
 };

@@ -21,6 +21,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+    int PlayerId = -1;
     CharacterState GetState();
     void SetState(CharacterState state_);
     CharacterMission GetMission();
