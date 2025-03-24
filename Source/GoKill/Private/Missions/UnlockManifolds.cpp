@@ -7,7 +7,7 @@
 #include "Engine/StaticMesh.h"
 #include "Characters/GK_Player.h"
 #include "shDebug.h"
-#include "UnlockManifoldsWidget.h"
+#include "Missions/UnlockManifoldsWidget.h"
 #include "Components/WidgetComponent.h"
 
 AUnlockManifolds::AUnlockManifolds()
@@ -69,14 +69,15 @@ void AUnlockManifolds::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent
 	bool missionStart = OverlapEventBegin(OtherActor);
 
     if (missionStart) {
-	    MissionFocusOn();
+        // 카메라 미션 쪽으로 돌리기
+	    //MissionFocusOn();
 
         // 마우스 버전
         auto pc = Cast<APlayerController>(activePlayer->GetController());
         pc->bShowMouseCursor = true;
 
         // 랜덤 숫자 뿌리기
-        BtnWidget->ResetBtn();
+        //BtnWidget->ResetBtn();
     }
 }
 
@@ -85,7 +86,6 @@ void AUnlockManifolds::OnMissionEndOverlap(UPrimitiveComponent* OverlappedCompon
     bool missionEnd = OverlapEventEnd(OtherActor);
 
     if (missionEnd) {
-        OverlapEventEnd(OtherActor);
         // 미션 초기화
     }
 }

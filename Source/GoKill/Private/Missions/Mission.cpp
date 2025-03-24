@@ -120,13 +120,21 @@ void AMission::MissionFocusOn()
 	// 플레이어 카메라의 각도 변경 및 위치 변경
 	//FVector cameraDir = this->GetActorLocation() - activePlayer->GetActorLocation();
 	//FVector cameraDir = this->GetActorLocation() - activePlayer->GetCameraLocation();
-	FVector cameraDir = GetActorForwardVector() - activePlayer->GetPlayerCamera()->GetForwardVector();
+	//FVector cameraDir = GetActorForwardVector() - activePlayer->GetPlayerCamera()->GetForwardVector();
 	//FRotator cameraRot = cameraDir.Rotation();
-    FRotator cameraRot = FQuat::FindBetweenVectors(GetActorForwardVector(), activePlayer->GetPlayerCamera()->GetForwardVector()).Rotator();
-    activePlayer->AddControllerYawInput(cameraRot.Yaw);
+    //FRotator cameraRot = FQuat::FindBetweenVectors(GetActorForwardVector(), activePlayer->GetPlayerCamera()->GetForwardVector()).Rotator();
 
-    Print(GetActorForwardVector().ToString(), FColor::Blue);
-    Print(cameraDir.ToString(), FColor::Red);
+    FVector CameraDir = FVector(activePlayer->GetPlayerCamera()->GetForwardVector().X, activePlayer->GetPlayerCamera()->GetForwardVector().Y, 0.0f);
+    FVector MissionDir = FVector((GetActorForwardVector() * -1).X, (GetActorForwardVector() * -1).Y, 0.0f);
+
+    float Dot = FVector::DotProduct(CameraDir, MissionDir);
+    float AcosAngle = FMath::Acos(Dot);
+    float AngleDegree = FMath::RadiansToDegrees(AcosAngle);
+
+    activePlayer->AddControllerYawInput(AngleDegree);
+
+    //Print(GetActorForwardVector().ToString(), FColor::Blue);
+    //Print(cameraDir.ToString(), FColor::Red);
     //Print(cameraRot.ToString(), FColor::Green);
 	//*/
 }
