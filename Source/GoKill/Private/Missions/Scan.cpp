@@ -68,7 +68,7 @@ void AScan::Tick(float DeltaTime)
             Print("Imposter", FColor::Blue);
         }
         else {
-            Print("Who is", FColor::Blue);
+            Print("UNKNOWN", FColor::Blue);
         }
 
         OverlapEventEnd(activePlayer);
