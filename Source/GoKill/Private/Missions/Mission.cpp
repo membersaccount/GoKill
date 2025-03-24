@@ -85,6 +85,7 @@ bool AMission::OverlapEventEnd(AActor* OtherActor)
         // 마우스 버전
         auto pc = Cast<APlayerController>(activePlayer->GetController());
         pc->bShowMouseCursor = false;
+        pc->SetInputMode(FInputModeGameAndUI());
 
 		// 1. 임무중인 플레이어 식별자 초기화
 		activePlayerId = -1;
@@ -94,8 +95,8 @@ bool AMission::OverlapEventEnd(AActor* OtherActor)
 		bMissionProcessing = false;
         bSuccess = false;
 
-		// 공통 작업이 전부 끝날 경우 true 를 반환하고, true 를 반환받은 미션 액터는 초기화 등의 작업을 한다. (미션이 성공적으로 완료 됐을 경우만 미션 진행도 올리기 잊지 말기! -> 이거는 Player 가 자기가 크루원인지 임포스터인지를 알 수 있게 Get 함수 만들어진 후에 가능)
-		return true;
+		// 공통 작업이 전부 끝날 경우 true 를 반환하고, true 를 반환받은 미션 액터는 초기화 등의 작업을 한다. (미션이 성공적으로 완료 됐을 경우만 미션 진행도 올리기 잊지 말기!
+        return true;
 	}
 	//*/
 
@@ -116,27 +117,33 @@ bool AMission::PlayerAfterDie(int32 playerId)
 
 void AMission::MissionFocusOn()
 {
-	///*
 	// 플레이어 카메라의 각도 변경 및 위치 변경
-	//FVector cameraDir = this->GetActorLocation() - activePlayer->GetActorLocation();
-	//FVector cameraDir = this->GetActorLocation() - activePlayer->GetCameraLocation();
-	//FVector cameraDir = GetActorForwardVector() - activePlayer->GetPlayerCamera()->GetForwardVector();
-	//FRotator cameraRot = cameraDir.Rotation();
-    //FRotator cameraRot = FQuat::FindBetweenVectors(GetActorForwardVector(), activePlayer->GetPlayerCamera()->GetForwardVector()).Rotator();
+    FVector MissionDir = FVector((GetActorForwardVector() * -1).X, (GetActorForwardVector() * -1).Y, 0.0f).GetSafeNormal();
 
-    FVector CameraDir = FVector(activePlayer->GetPlayerCamera()->GetForwardVector().X, activePlayer->GetPlayerCamera()->GetForwardVector().Y, 0.0f);
-    FVector MissionDir = FVector((GetActorForwardVector() * -1).X, (GetActorForwardVector() * -1).Y, 0.0f);
+    /*
+    FVector CameraDir = FVector(activePlayer->GetPlayerCamera()->GetForwardVector().X, activePlayer->GetPlayerCamera()->GetForwardVector().Y, 0.0f).GetSafeNormal();
+    FVector SubDir = FVector(GetActorLocation().X, GetActorLocation().Y, 0.0f) - FVector(activePlayer->GetPlayerCamera()->GetComponentLocation().X, activePlayer->GetPlayerCamera()->GetComponentLocation().Y, 0.0f);
 
+    // 내적을 구하면 절대값(a) * 절대값(b) * cos(사이각(라디안)) 이 된다
     float Dot = FVector::DotProduct(CameraDir, MissionDir);
+    // 내적을 역 코사인
     float AcosAngle = FMath::Acos(Dot);
+    // 라디안을 우리가 쓰는 도수법으로 변경
     float AngleDegree = FMath::RadiansToDegrees(AcosAngle);
 
+    // 사이각은 구했는데 이게 카메라 바라보는 기준으로 오른편에 있는지 왼편에 있는지 어떻게..
     activePlayer->AddControllerYawInput(AngleDegree);
+
+    Print(FString::FormatAsNumber(AngleDegree), FColor::Red);
 
     //Print(GetActorForwardVector().ToString(), FColor::Blue);
     //Print(cameraDir.ToString(), FColor::Red);
     //Print(cameraRot.ToString(), FColor::Green);
-	//*/
+    */
+
+    activePlayer->SetActorRotation(MissionDir.Rotation());
+    auto pc = Cast<APlayerController>(activePlayer->GetController());
+    pc->SetControlRotation(MissionDir.Rotation());
 }
 
 int32 AMission::GetMissionId()

@@ -30,8 +30,6 @@ AUnlockManifolds::AUnlockManifolds()
         BtnComp->SetWidgetClass(TempWidget.Class);
         BtnComp->SetRelativeLocation(FVector(51.0f, -39.0f, -107.0f));
         BtnComp->SetRelativeScale3D(FVector(1.0f, 0.35f, 0.8f));
-
-        BtnWidget = Cast<UUnlockManifoldsWidget>(BtnComp->GetUserWidgetObject());
     }
 
     MissionId = 1;
@@ -43,6 +41,9 @@ void AUnlockManifolds::BeginPlay()
 
 	OverlapComp->OnComponentBeginOverlap.AddDynamic(this, &AUnlockManifolds::OnMissionOverlap);
 	OverlapComp->OnComponentEndOverlap.AddDynamic(this, &AUnlockManifolds::OnMissionEndOverlap);
+
+    if(BtnComp == nullptr) return;
+    BtnWidget = Cast<UUnlockManifoldsWidget>(BtnComp->GetUserWidgetObject());
 }
 
 void AUnlockManifolds::Tick(float DeltaTime)
@@ -66,18 +67,24 @@ void AUnlockManifolds::Tick(float DeltaTime)
 
 void AUnlockManifolds::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+    if (BtnWidget == nullptr) {
+        Print("BtnWidget is nullptr", FColor::Red);
+        return;
+    }
+
 	bool missionStart = OverlapEventBegin(OtherActor);
 
     if (missionStart) {
         // 카메라 미션 쪽으로 돌리기
-	    //MissionFocusOn();
+	    MissionFocusOn();
 
         // 마우스 버전
         auto pc = Cast<APlayerController>(activePlayer->GetController());
         pc->bShowMouseCursor = true;
+        pc->SetInputMode(FInputModeUIOnly());
 
         // 랜덤 숫자 뿌리기
-        //BtnWidget->ResetBtn();
+        BtnWidget->ResetBtn();
     }
 }
 
