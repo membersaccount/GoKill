@@ -27,13 +27,14 @@ void UUnlockManifoldsWidget::NativeConstruct()
 
 void UUnlockManifoldsWidget::ResetBtn()
 {
+
     // btn 을 무작위로 배열
     //UKismetArrayLibrary::GenericArray_Shuffle(&btnNum, FArrayProperty);
     ShuffleTArray(btnNum);
 
-    for (int i = 0; i < 10; i++) {
-        UE_LOG(LogTemp, Warning, TEXT("%d번째 버튼 : %d"), i, btnNum[i]);
-    }
+    //for (int i = 0; i < 10; i++) {
+    //    UE_LOG(LogTemp, Warning, TEXT("%d번째 버튼 : %d"), i, btnNum[i]);
+    //}
 
     // btnText 에 해당 숫자를 입력
     BtnText1->SetText(FText::AsNumber(btnNum[0]));

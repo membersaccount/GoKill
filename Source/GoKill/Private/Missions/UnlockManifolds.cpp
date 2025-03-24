@@ -66,18 +66,33 @@ void AUnlockManifolds::Tick(float DeltaTime)
 
 void AUnlockManifolds::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+    if (!BtnComp->GetUserWidgetObject()->IsA<UUnlockManifoldsWidget>()) {
+        Print("BtnComp->GetUserWidgetObject() is not UUnlockManifoldsWidget", FColor::Red);
+    }
+
+
+    if (BtnComp == nullptr) {
+        Print("BtnComp is nullptr", FColor::Red);
+        return;
+    }
+
+    if (BtnWidget == nullptr) { // 문제의 원인
+        Print("BtnWidget is nullptr", FColor::Red);
+        return;
+    }
+
 	bool missionStart = OverlapEventBegin(OtherActor);
 
     if (missionStart) {
         // 카메라 미션 쪽으로 돌리기
-	    //MissionFocusOn();
+	    MissionFocusOn();
 
         // 마우스 버전
         auto pc = Cast<APlayerController>(activePlayer->GetController());
         pc->bShowMouseCursor = true;
 
         // 랜덤 숫자 뿌리기
-        //BtnWidget->ResetBtn();
+        BtnWidget->ResetBtn();
     }
 }
 
