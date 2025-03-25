@@ -29,6 +29,10 @@ protected:
     UPROPERTY(VisibleAnywhere)
     int32 MissionId = 0;
 
+    // 미션명
+    UPROPERTY(VisibleAnywhere)
+    FString MissionName;
+
     // 미션이 성공했는가
     bool bSuccess = false;
 
@@ -46,10 +50,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* OverlapComp;
 
-public:
-    // 장소 식별자
-    UPROPERTY(EditAnywhere)
-    int32 LocationId = 0;
+    // 마우스를 사용하는가
+    UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
+    bool bUseMouse = true;
 
 public:
 	// 미션 범위에 overlap 됐을 때 공통적인 작업 : overlap 된 플레이어가 작업 시작하면 true 반환

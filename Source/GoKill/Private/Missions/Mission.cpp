@@ -83,9 +83,11 @@ bool AMission::OverlapEventEnd(AActor* OtherActor)
 		if (pl->PlayerId != activePlayerId) return false;
 
         // 마우스 버전
-        auto pc = Cast<APlayerController>(activePlayer->GetController());
-        pc->bShowMouseCursor = false;
-        pc->SetInputMode(FInputModeGameAndUI());
+        if(bUseMouse) {
+            auto pc = Cast<APlayerController>(activePlayer->GetController());
+            pc->bShowMouseCursor = false;
+            pc->SetInputMode(FInputModeGameAndUI());
+        }
 
 		// 1. 임무중인 플레이어 식별자 초기화
 		activePlayerId = -1;
