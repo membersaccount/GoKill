@@ -42,6 +42,9 @@ protected:
 	// 미션 아이템을 사용중인 플레이어의 식별자
 	int32 activePlayerId = -1;
 
+    // 플레이어가 진행중인 미션 list 의 idx
+    int MissionListIdx = -1;
+
 	class AGK_Player* activePlayer;
 
 	UPROPERTY(EditAnywhere)
@@ -66,6 +69,9 @@ public:
 
 	// 플레이어 카메라가 미션 아이템을 주목해야할지는 미션마다 다르기에 따로 분리
 	virtual void MissionFocusOn();
+
+    // 미션 완료 로직
+    virtual void MissionSuccess();
 
     // 미션 식별자 조회
     int32 GetMissionId();

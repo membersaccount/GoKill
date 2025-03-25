@@ -22,6 +22,8 @@ public:
 
 public:
     int PlayerId = -1;
+    TArray<int32> MissionList;
+    TArray<bool> MissionCompleted;
     CharacterState GetState();
     void SetState(CharacterState state_);
     CharacterMission GetMission();

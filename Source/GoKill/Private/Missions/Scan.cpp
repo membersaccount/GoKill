@@ -73,6 +73,7 @@ void AScan::Tick(float DeltaTime)
             Print("UNKNOWN", FColor::Blue);
         }
 
+        MissionSuccess();
         OverlapEventEnd(activePlayer);
         StartPlayerId = -1;
         CurrentTime = 0.0f;

@@ -83,7 +83,7 @@ void AUnlockManifolds::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent
         if(bUseMouse) {
             auto pc = Cast<APlayerController>(activePlayer->GetController());
             pc->bShowMouseCursor = true;
-            pc->SetInputMode(FInputModeUIOnly());
+            //pc->SetInputMode(FInputModeUIOnly());
         }
 
         // 랜덤 숫자 뿌리기
