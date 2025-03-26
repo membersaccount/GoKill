@@ -7,6 +7,10 @@
 #include "Camera/CameraComponent.h"
 
 #include "shDebug.h"
+#include "MotionControllerComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMesh.h"
+#include "../../../../Plugins/Runtime/XRBase/Source/XRBase/Public/HeadMountedDisplayFunctionLibrary.h"
 
 AGK_Player::AGK_Player()
 {
@@ -15,11 +19,46 @@ AGK_Player::AGK_Player()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(RootComponent);
 	FollowCamera->bUsePawnControlRotation = true;
+
+
+    // 모션 컨트롤러 컴포넌트 추가
+    LeftHand = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("LeftHand"));
+    LeftHand->SetupAttachment(RootComponent);
+    LeftHand->SetTrackingMotionSource(TEXT("Left"));
+
+    LeftHandSK = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("LeftHandSK"));
+    LeftHandSK->SetupAttachment(LeftHand);
+
+    ConstructorHelpers::FObjectFinder<USkeletalMesh>TempLeftHand(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_left.SKM_MannyXR_left'"));
+    if (TempLeftHand.Succeeded()) {
+        LeftHandSK->SetSkeletalMesh(TempLeftHand.Object);
+    }
+
+    RightHand = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightHand"));
+    RightHand->SetupAttachment(RootComponent);
+    RightHand->SetTrackingMotionSource(TEXT("Right"));
+
+    RightHandSK = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("RightHandSK"));
+    RightHandSK->SetupAttachment(RightHand);
+
+    ConstructorHelpers::FObjectFinder<USkeletalMesh>TempRightHand(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_right.SKM_MannyXR_right'"));
+    if (TempRightHand.Succeeded()) {
+        RightHandSK->SetSkeletalMesh(TempRightHand.Object);
+    }
 }
 
 void AGK_Player::BeginPlay()
 {
 	Super::BeginPlay();
+
+    // HMD 가 연결되어 있으면, HMD 의 Tracking 위치를 조절
+    if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled()) {
+        // EHMDTrackingOrigin::View 로 하면 원래 카메라가 설치되어 있는 높이
+        UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);
+        // 초기 설정 값을 Yaw 값 외의 값을 내부적으로 조정해놔준다. 인자값에 숫자를 넣으면 해당 Yaw 값 (디폴트 : 0) 적용된다.
+        // 뷰 위치 (재)조정 느낌
+        UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
+    }
 }
 
 void AGK_Player::Tick(float DeltaTime)
