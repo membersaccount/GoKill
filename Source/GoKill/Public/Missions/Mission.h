@@ -19,6 +19,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -33,9 +35,6 @@ protected:
     UPROPERTY(VisibleAnywhere)
     FString MissionName;
 
-    // 미션이 성공했는가
-    bool bSuccess = false;
-
 	// 미션 아이템이 사용중인가 여부
 	bool bMissionProcessing = false;
 
@@ -44,6 +43,13 @@ protected:
 
     // 플레이어가 진행중인 미션 list 의 idx
     int MissionListIdx = -1;
+    
+    // 마우스를 사용하는가
+    UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
+    bool bUseMouse = true;
+
+    // 미션 핸들러
+    class MissionHandler* mHandler;
 
 	class AGK_Player* activePlayer;
 
@@ -52,11 +58,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* OverlapComp;
-
-    // 마우스를 사용하는가
-    UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
-    bool bUseMouse = true;
-
 public:
 	// 미션 범위에 overlap 됐을 때 공통적인 작업 : overlap 된 플레이어가 작업 시작하면 true 반환
 	virtual bool OverlapEventBegin(AActor* OtherActor);
@@ -70,12 +71,6 @@ public:
 	// 플레이어 카메라가 미션 아이템을 주목해야할지는 미션마다 다르기에 따로 분리
 	virtual void MissionFocusOn();
 
-    // 미션 완료 로직
-    virtual void MissionSuccess();
-
     // 미션 식별자 조회
     int32 GetMissionId();
-
-    // 미션 성공 여부 조회
-    bool GetIsSuccess();
 };

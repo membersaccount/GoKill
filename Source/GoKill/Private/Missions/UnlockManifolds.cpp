@@ -9,6 +9,7 @@
 #include "shDebug.h"
 #include "Missions/UnlockManifoldsWidget.h"
 #include "Components/WidgetComponent.h"
+#include "Missions/MissionHandler.h"
 
 AUnlockManifolds::AUnlockManifolds()
 {
@@ -57,6 +58,7 @@ void AUnlockManifolds::Tick(float DeltaTime)
         if (BtnWidget->bSuccess) {
             bSuccess = true;
             // 미션 진행도 늘리기
+            mHandler->MissionClear();
 
             // 미션 종료
             OverlapEventEnd(activePlayer);
