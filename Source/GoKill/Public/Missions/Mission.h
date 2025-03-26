@@ -29,6 +29,10 @@ protected:
     UPROPERTY(VisibleAnywhere)
     int32 MissionId = 0;
 
+    // 미션명
+    UPROPERTY(VisibleAnywhere)
+    FString MissionName;
+
     // 미션이 성공했는가
     bool bSuccess = false;
 
@@ -38,6 +42,9 @@ protected:
 	// 미션 아이템을 사용중인 플레이어의 식별자
 	int32 activePlayerId = -1;
 
+    // 플레이어가 진행중인 미션 list 의 idx
+    int MissionListIdx = -1;
+
 	class AGK_Player* activePlayer;
 
 	UPROPERTY(EditAnywhere)
@@ -46,10 +53,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* OverlapComp;
 
-public:
-    // 장소 식별자
-    UPROPERTY(EditAnywhere)
-    int32 LocationId = 0;
+    // 마우스를 사용하는가
+    UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
+    bool bUseMouse = true;
 
 public:
 	// 미션 범위에 overlap 됐을 때 공통적인 작업 : overlap 된 플레이어가 작업 시작하면 true 반환
@@ -63,6 +69,9 @@ public:
 
 	// 플레이어 카메라가 미션 아이템을 주목해야할지는 미션마다 다르기에 따로 분리
 	virtual void MissionFocusOn();
+
+    // 미션 완료 로직
+    virtual void MissionSuccess();
 
     // 미션 식별자 조회
     int32 GetMissionId();

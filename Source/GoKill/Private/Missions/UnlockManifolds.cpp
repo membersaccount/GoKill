@@ -33,6 +33,7 @@ AUnlockManifolds::AUnlockManifolds()
     }
 
     MissionId = 1;
+    MissionName = "Unlock Manifolds";
 }
 
 void AUnlockManifolds::BeginPlay()
@@ -79,9 +80,11 @@ void AUnlockManifolds::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent
 	    MissionFocusOn();
 
         // 마우스 버전
-        auto pc = Cast<APlayerController>(activePlayer->GetController());
-        pc->bShowMouseCursor = true;
-        pc->SetInputMode(FInputModeUIOnly());
+        if(bUseMouse) {
+            auto pc = Cast<APlayerController>(activePlayer->GetController());
+            pc->bShowMouseCursor = true;
+            //pc->SetInputMode(FInputModeUIOnly());
+        }
 
         // 랜덤 숫자 뿌리기
         BtnWidget->ResetBtn();

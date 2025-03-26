@@ -32,10 +32,6 @@ void UUnlockManifoldsWidget::ResetBtn()
     //UKismetArrayLibrary::GenericArray_Shuffle(&btnNum, FArrayProperty);
     ShuffleTArray(btnNum);
 
-    //for (int i = 0; i < 10; i++) {
-    //    UE_LOG(LogTemp, Warning, TEXT("%d번째 버튼 : %d"), i, btnNum[i]);
-    //}
-
     // btnText 에 해당 숫자를 입력
     BtnText1->SetText(FText::AsNumber(btnNum[0]));
     BtnText2->SetText(FText::AsNumber(btnNum[1]));
@@ -58,7 +54,6 @@ void UUnlockManifoldsWidget::ResetBtn()
 void UUnlockManifoldsWidget::CheckBtn()
 {
     for (int i = 0; i < 10; i++) {
-        UE_LOG(LogTemp, Warning, TEXT("%d"), btnNum[pressedNum[i] - 1]);
         if (btnNum[pressedNum[i] - 1] != i + 1) {
             bSuccess = false;
             // 미션 실패 처리

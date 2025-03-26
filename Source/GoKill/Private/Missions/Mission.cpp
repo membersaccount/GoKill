@@ -52,10 +52,21 @@ bool AMission::OverlapEventBegin(AActor* OtherActor)
 		// 1. 플레이어 임무 권한 확인
 
 		// 2. 임무 권한이 없는 플레이어일 경우 return;
-		//if (해당 플레이어한테 임무 권한이 없음) {
-		//	activePlayerId = -1;
-		//	return;
-		//}
+
+        bool bCan = false;
+        for (int i = 0; i < pl->MissionList.Num(); i++) {
+            if (MissionId == pl->MissionList[i] && !pl->MissionCompleted[i]) {
+                // 플레이어한테 임무 권한이 있고 아직 해당 임무를 수행 안했을 경우
+                bCan = true;
+                MissionListIdx = i;
+                break;
+            }
+        }
+        if (!bCan) {
+            activePlayerId = -1;
+            return false;
+        }
+
 		// 임무 권한이 있는 플레이어일 경우
 		activePlayerId = pl->PlayerId; // 특정 플레이어 식별자
 		activePlayer = pl;
@@ -83,9 +94,11 @@ bool AMission::OverlapEventEnd(AActor* OtherActor)
 		if (pl->PlayerId != activePlayerId) return false;
 
         // 마우스 버전
-        auto pc = Cast<APlayerController>(activePlayer->GetController());
-        pc->bShowMouseCursor = false;
-        pc->SetInputMode(FInputModeGameAndUI());
+        if(bUseMouse) {
+            auto pc = Cast<APlayerController>(activePlayer->GetController());
+            pc->bShowMouseCursor = false;
+            pc->SetInputMode(FInputModeGameAndUI());
+        }
 
 		// 1. 임무중인 플레이어 식별자 초기화
 		activePlayerId = -1;
@@ -144,6 +157,23 @@ void AMission::MissionFocusOn()
     activePlayer->SetActorRotation(MissionDir.Rotation());
     auto pc = Cast<APlayerController>(activePlayer->GetController());
     pc->SetControlRotation(MissionDir.Rotation());
+}
+
+void AMission::MissionSuccess()
+{
+    if (MissionListIdx == -1 || activePlayer == nullptr) {
+        return;
+    }
+
+    // 임포스터가 아닐 경우 총 미션 성공도 올리기
+    if (activePlayer->GetState() != CharacterState::Imposter) {
+        // 총 미션 성공도 증가
+    }
+
+    // 플레이어의 미션 임무 completed 처리
+    activePlayer->MissionCompleted[MissionListIdx] = true;
+
+    MissionListIdx = -1;
 }
 
 int32 AMission::GetMissionId()

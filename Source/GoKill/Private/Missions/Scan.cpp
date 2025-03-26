@@ -20,6 +20,9 @@ AScan::AScan()
         MeshComp->SetStaticMesh(TempMesh.Object);
 
     }
+
+    MissionId = 2;
+    MissionName = "Scan";
 }
 
 // Called when the game starts or when spawned
@@ -59,7 +62,6 @@ void AScan::Tick(float DeltaTime)
         //FString logMsg = UEnum::GetValueAsString(activePlayer->GetState()); // UEnum 이 아니라 그냥 enum 이어서 안 됨
 
         //Print(logMsg, FColor::Blue);
-        //UE_LOG(LogTemp, Warning, TEXT("정체 : %s"), *logMsg);
 
         if (activePlayer->GetState() == CharacterState::CrewMember) {
             Print("CrewMember", FColor::Blue);
@@ -71,6 +73,7 @@ void AScan::Tick(float DeltaTime)
             Print("UNKNOWN", FColor::Blue);
         }
 
+        MissionSuccess();
         OverlapEventEnd(activePlayer);
         StartPlayerId = -1;
         CurrentTime = 0.0f;
