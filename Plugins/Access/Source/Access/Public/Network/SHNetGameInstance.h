@@ -20,8 +20,9 @@ public:
 
 public:
 	SOCKET* cachedSocket;
+	int clientID;
 
-private:
-	SHNetCore network;
-	HWND consoleHandle;
+	HWND console;
+
+	SHNetCore* network = SHNetCore::GetInstance();
 };

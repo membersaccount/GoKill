@@ -7,35 +7,38 @@ USHNetGameInstance::USHNetGameInstance()
 
 void USHNetGameInstance::Init()
 {
-    HWND ConsoleWindowHandle = nullptr;
+ //   if (AllocConsole())
+ //   {
+ //       FILE* pCout;
+ //       freopen_s(&pCout, "CONOUT$", "w", stdout);
+ //       freopen_s(&pCout, "CONOUT$", "w", stderr);
+ //       std::cout.clear();
+ //       std::cerr.clear();
+ //       std::clog.clear();
+ //       std::wcout.clear();
+ //       std::wcerr.clear();
+ //       std::wclog.clear();
 
-    if (AllocConsole())
+ //       std::cout << "Console Debug Start" << std::endl;
+ //   }
+
+	//console = GetConsoleWindow();
+
+    if (network->SetGameInstanceCount != 0)
     {
-        FILE* pCout;
-        freopen_s(&pCout, "CONOUT$", "w", stdout);
-        freopen_s(&pCout, "CONOUT$", "w", stderr);
-        std::cout.clear();
-        std::cerr.clear();
-        std::clog.clear();
-        std::wcout.clear();
-        std::wcerr.clear();
-        std::wclog.clear();
-
-        std::cout << "Console window created!" << std::endl;
-
-        ConsoleWindowHandle = GetConsoleWindow();
+		GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Red, TEXT("[Critical Error] GameInstance is already set"));
+        return;
     }
 
-    std::cout << "Hello" << std::endl;
-
-    FreeConsole();
-
-	network.Run();
+	//network->Run();
+	//network->SetGameInstance(this);
+	cachedSocket = network->GetSocket();
 }
 
 void USHNetGameInstance::Shutdown()
 {
-	network.DestroyThread();
+    //FreeConsole();
+    //SendMessage(console, WM_CLOSE, 0, 0);
 
-	//Debug::DestroyConsole(consoleHandle);
+	network->DestroyThread();
 }

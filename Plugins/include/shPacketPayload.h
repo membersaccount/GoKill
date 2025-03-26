@@ -7,21 +7,21 @@ namespace Packet
 {
 	namespace Payload
 	{
-		struct DEBUG
+		struct DEBUG	// Type 0
 		{
 			float x;
 			float y;
 			float z;
 		};
 
-		struct NEWPLAYER
+		struct NEWPLAYER	// Type 1
 		{
 			uint32_t id;
 		};
 
-		struct MOVEMENT
+		struct MOVEMENT		// Type 2
 		{
-			uint32_t id;
+			int id;
 			float x;
 			float y;
 			float z;

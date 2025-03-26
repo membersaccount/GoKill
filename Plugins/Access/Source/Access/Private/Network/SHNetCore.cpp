@@ -1,6 +1,11 @@
 #include "Network/SHNetCore.h"
 #include "shPacketHandler.h"
 
+#include "Network/SHNetGameInstance.h"
+#include "Network/SHNetPlayerController.h"
+
+SHNetCore* SHNetCore::networkSystem = nullptr;
+
 SHNetCore::SHNetCore()
 	: recvBuffer(1024), sendBuffer(1024)
 {
@@ -9,6 +14,16 @@ SHNetCore::SHNetCore()
 SHNetCore::~SHNetCore()
 {
 	WSACleanup();
+}
+
+SHNetCore* SHNetCore::GetInstance()
+{
+	if (networkSystem == nullptr)
+	{
+		networkSystem = new SHNetCore();
+	}
+
+	return networkSystem;
 }
 
 bool SHNetCore::Run()
@@ -41,12 +56,31 @@ bool SHNetCore::Run()
 void SHNetCore::DestroyThread()
 {
 	isRecvRun = false;
+
+	closesocket(clientSocket);
+
 	if (recvThread.joinable())
 	{
 		recvThread.join();
 	}
 
 	Core::CloseSock(&clientSocket);
+}
+
+SOCKET* SHNetCore::GetSocket()
+{
+	return &clientSocket;
+}
+
+void SHNetCore::SetGameInstance(USHNetGameInstance* gameInstance_)
+{
+	cachedGameInstance = gameInstance_;
+	++SetGameInstanceCount;
+}
+
+void SHNetCore::SetController(ASHNetPlayerController* controller_)
+{
+	cachedController = controller_;
 }
 
 void SHNetCore::SendTestMsg()
@@ -81,7 +115,7 @@ void SHNetCore::RecvThread()
 	constexpr const int bufferSize = 1024;
 	char buffer[bufferSize];
 
-	while (true)
+	while (isRecvRun)
 	{
 		int recvSize = recv(clientSocket, buffer, bufferSize, 0);
 
@@ -94,11 +128,8 @@ void SHNetCore::RecvThread()
 		recvBuffer.Write(buffer, recvSize);
 		printf("Recv Size = %d, Used Size = %d\n", recvSize, recvBuffer.GetUsedDataSize());
 
-		// tick
 		while (recvBuffer.GetUsedDataSize() >= sizeof(Packet::Header::DEFAULT))
 		{
-			//printf("Packet Heandler\n");
-
 			char cpyBuffer[1024];
 			int cpyBufferSize = sizeof(Packet::Header::DEFAULT);
 
@@ -106,16 +137,55 @@ void SHNetCore::RecvThread()
 
 			Packet::Header::DEFAULT* header = reinterpret_cast<Packet::Header::DEFAULT*>(cpyBuffer);
 
-			// lookup table(lib) + callback(UE)
 			switch (header->type)
 			{
 			case 0:
 			{
+				printf("[Debug]: case 0: Try to Read Packet: Header Type=%d, Size=%d\n", header->type, header->size);
+
 				recvBuffer.Read(cpyBuffer + sizeof(Packet::Header::DEFAULT), header->size - sizeof(Packet::Header::DEFAULT));
 				Packet::Payload::DEBUG* testData = reinterpret_cast<Packet::Payload::DEBUG*>(cpyBuffer + sizeof(Packet::Header::DEFAULT));
 
-				printf("Recv Packet: Header Type=%d, Size=%d\n", header->type, header->size);
-				printf("Recv Packet: Data X=%f, Y=%f, Z=%f\n", testData->x, testData->y, testData->z);
+				printf("Recv Packet: Header Type=%d, Size=%d, Data X=%f, Y=%f, Z=%f\n", header->type, header->size, testData->x, testData->y, testData->z);
+			}
+			break;
+			case 1:
+			{
+				printf("[Debug]: case 1: Try to Read Packet: Header Type=%d, Size=%d\n", header->type, header->size);
+
+				recvBuffer.Read(cpyBuffer + sizeof(Packet::Header::DEFAULT), header->size - sizeof(Packet::Header::DEFAULT));
+				Packet::Payload::NEWPLAYER* newPlayerData = reinterpret_cast<Packet::Payload::NEWPLAYER*>(cpyBuffer + sizeof(Packet::Header::DEFAULT));
+
+				printf("Recv Packet: Header Type=%d, Size=%d, Data ID=%d\n", header->type, header->size, newPlayerData->id);
+
+				cachedGameInstance->clientID = newPlayerData->id;
+
+			}
+			break;
+			case 2:
+			{
+				printf("[Debug]: case 2: Try to Read Packet: Header Type=%d, Size=%d\n", header->type, header->size);
+
+				recvBuffer.Read(cpyBuffer + sizeof(Packet::Header::DEFAULT), header->size - sizeof(Packet::Header::DEFAULT));
+				Packet::Payload::MOVEMENT* movementData = reinterpret_cast<Packet::Payload::MOVEMENT*>(cpyBuffer + sizeof(Packet::Header::DEFAULT));
+
+
+				printf("Recv Packet: Header Type=%d, Size=%d, Data ID=%d, X=%f, Y=%f, Z=%f, Pitch=%f, Yaw=%f, Roll=%f, Vx=%f, Vy=%f, Vz=%f\n",
+					header->type, header->size, movementData->id, movementData->x, movementData->y, movementData->z, movementData->Pitch, movementData->Yaw, movementData->Roll, movementData->vx, movementData->vy, movementData->vz);
+
+				if (cachedController == nullptr)
+				{
+					continue;
+				}
+
+				if (cachedController->cachedID == movementData->id)
+				{
+					continue;
+				}
+
+				std::lock_guard<std::mutex> lock(cachedController->movementMutex);
+				cachedController->movementWorks.push(*movementData);
+
 			}
 			break;
 			default:
