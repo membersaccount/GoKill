@@ -1,4 +1,4 @@
-# Visual Studio 2015 user specific files
+﻿# Visual Studio 2015 user specific files
 .vs/
 
 # Compiled Object files
@@ -77,3 +77,14 @@ DerivedDataCache/*
 Plugins/MetaXR/*
 Plugins/MetaXRPlatform/*
 package/*
+
+!yshnet.lib
+!TestServer_2503_ver121.exe
+BuildStable/
+Build/
+Build1/
+Build2/
+Build3/
+Build4/
+Build5/
+Build6/
