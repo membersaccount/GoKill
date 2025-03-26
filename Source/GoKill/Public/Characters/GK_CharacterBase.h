@@ -10,6 +10,13 @@ class GOKILL_API AGK_CharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
+    //struct MissionInfo
+    //{
+    //    int32 MissionId;
+    //    FString MissionName;
+    //    bool Completed;
+    //};
+
 public:
 	AGK_CharacterBase();
 
@@ -22,6 +29,7 @@ public:
 
 public:
     int PlayerId = -1;
+    //TArray<MissionInfo> MissionList;
     TArray<int32> MissionList;
     TArray<bool> MissionCompleted;
     CharacterState GetState();
