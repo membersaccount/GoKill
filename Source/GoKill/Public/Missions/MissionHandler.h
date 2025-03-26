@@ -10,8 +10,8 @@
 class GOKILL_API MissionHandler
 {
 private:
-    // 존재하는 미션 아이디 목록 (확률 조정을 위해 중복 포함)
-    TArray<int> MissionIds = {1, 2};
+    // 미션 식별자 목록 (+확률 조정)
+    TArray<int32> MissionIds {1, 2, 2};
 
     int MissionListIdx = -1;
     
@@ -28,5 +28,6 @@ public:
     void MissionClear();
 
     // 미션 랜덤 배부
-    void MissionHandout(TArray<class AGK_Player*> players, int numOfMissions);
+    void MissionHandoutAll(TArray<class AGK_Player*> players, int numOfMissions);
+    void MissionHandout(class AGK_Player* player, int numOfMissions);
 };

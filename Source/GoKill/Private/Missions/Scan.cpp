@@ -22,7 +22,7 @@ AScan::AScan()
 
     }
 
-    MissionId = 2;
+    MissionId = 1;
     MissionName = "Scan";
 }
 

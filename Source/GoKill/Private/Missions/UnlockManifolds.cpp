@@ -33,7 +33,7 @@ AUnlockManifolds::AUnlockManifolds()
         BtnComp->SetRelativeScale3D(FVector(1.0f, 0.35f, 0.8f));
     }
 
-    MissionId = 1;
+    MissionId = 2;
     MissionName = "Unlock Manifolds";
 }
 

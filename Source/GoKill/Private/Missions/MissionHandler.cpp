@@ -4,6 +4,7 @@
 #include "Missions/MissionHandler.h"
 #include "Characters/GK_Player.h"
 #include "Kismet/GameplayStatics.h"
+#include "shDebug.h"
 
 MissionHandler::MissionHandler()
 {
@@ -43,7 +44,7 @@ void MissionHandler::MissionClear()
     MissionListIdx = -1;
 }
 
-void MissionHandler::MissionHandout(TArray<AGK_Player*> players, int numOfMissions)
+void MissionHandler::MissionHandoutAll(TArray<AGK_Player*> players, int numOfMissions)
 {
     // 무작위 시드 설정
     float CurrentTime = UGameplayStatics::GetRealTimeSeconds(nullptr);
@@ -56,7 +57,24 @@ void MissionHandler::MissionHandout(TArray<AGK_Player*> players, int numOfMissio
     for (AGK_Player* pl : players) {
         for (int i = 0; i < numOfMissions; i++) {
             int randIdx = FMath::RandRange(0, MissionCount - 1);
-            //pl->MissionList.Add(MissionInfo());
+            pl->MissionList.Add(MissionIds[randIdx]);
+            pl->MissionCompleted.Add(false);
         }
+    }
+}
+
+void MissionHandler::MissionHandout(class AGK_Player* player, int numOfMissions)
+{
+    // 무작위 시드 설정
+    float CurrentTime = UGameplayStatics::GetRealTimeSeconds(nullptr);
+    int32 Seed = FMath::FloorToInt(CurrentTime * 1000.0f);
+    FMath::RandInit(Seed);
+
+    int MissionCount = MissionIds.Num();
+
+    for (int i = 0; i < numOfMissions; i++) {
+        int randIdx = FMath::RandRange(0, MissionCount - 1);
+        player->MissionList.Add(MissionIds[randIdx]);
+        player->MissionCompleted.Add(false);
     }
 }
