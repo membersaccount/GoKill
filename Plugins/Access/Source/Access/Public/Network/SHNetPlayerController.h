@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
@@ -29,6 +29,8 @@ public:
 
 	void SendSelfMovement();
 	void UpdateOtherPlayerMovement();
+
+    //void SendVote
 
 public:
 	std::mutex movementMutex;
