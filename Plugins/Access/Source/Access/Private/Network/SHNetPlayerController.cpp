@@ -77,14 +77,14 @@ void ASHNetPlayerController::SendSelfMovement()
 	movement.vz = velocity.Z;
 
 	char tempBuffer[1024] = { 0 };
-	memcpy(tempBuffer, &header, sizeof(Packet::Header::DEFAULT));
-	memcpy(tempBuffer + sizeof(Packet::Header::DEFAULT), &movement, sizeof(Packet::Payload::MOVEMENT));
+	memcpy(tempBuffer, &header, packetHeaderSize);
+	memcpy(tempBuffer + packetHeaderSize, &movement, sizeof(Packet::Payload::MOVEMENT));
 
 	Packet::Header::DEFAULT* debugHeader = reinterpret_cast<Packet::Header::DEFAULT*>(tempBuffer);
-	Packet::Payload::MOVEMENT* debugMovement = reinterpret_cast<Packet::Payload::MOVEMENT*>(tempBuffer + sizeof(Packet::Header::DEFAULT));
+	Packet::Payload::MOVEMENT* debugMovement = reinterpret_cast<Packet::Payload::MOVEMENT*>(tempBuffer + packetHeaderSize);
 	//printf("Send Packet: Header Type=%d, Size=%d, Data ID=%d, X=%f, Y=%f, Z=%f, Pitch=%f, Yaw=%f, Roll=%f, Vx=%f, Vy=%f, Vz=%f\n", debugHeader->type, debugHeader->size, debugMovement->id, debugMovement->x, debugMovement->y, debugMovement->z, debugMovement->Pitch, debugMovement->Yaw, debugMovement->Roll, debugMovement->vx, debugMovement->vy, debugMovement->vz);
 
-	send(*cachedSocket, tempBuffer, sizeof(Packet::Header::DEFAULT) + sizeof(Packet::Payload::MOVEMENT), 0);
+	send(*cachedSocket, tempBuffer, packetHeaderSize + sizeof(Packet::Payload::MOVEMENT), 0);
 }
 
 void ASHNetPlayerController::UpdateOtherPlayerMovement()
@@ -116,4 +116,73 @@ void ASHNetPlayerController::UpdateOtherPlayerMovement()
 		otherPlayer->SetActorRotation(FRotator(movementData.Pitch, movementData.Yaw, movementData.Roll));
 		otherPlayer->GetCharacterMovement()->Velocity = FVector(movementData.vx, movementData.vy, movementData.vz);
 	}
+}
+
+void ASHNetPlayerController::SendVoteData(int id_)
+{
+    header.type = 3;
+    header.size = packetHeaderSize + sizeof(Packet::Payload::VOTE_DATA);
+
+    Packet::Payload::VOTE_DATA voteData;
+    voteData.id = cachedID;
+    voteData.idTarget = id_;
+
+    char tempBuffer[64] = { 0 };
+    memcpy(tempBuffer, &header, packetHeaderSize);
+    memcpy(tempBuffer + packetHeaderSize, &voteData, sizeof(Packet::Payload::VOTE_DATA));
+
+    Packet::Header::DEFAULT* debugHeader = reinterpret_cast<Packet::Header::DEFAULT*>(tempBuffer);
+    Packet::Payload::VOTE_DATA* debugVoteData = reinterpret_cast<Packet::Payload::VOTE_DATA*>(tempBuffer + packetHeaderSize);
+    //printf("Send Packet: Header Type=%d, Size=%d, Data VoteID=%d\n", debugHeader->type, debugHeader->size, debugVoteData->idTarget);
+    GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Blue, FString::Printf(TEXT("Send Packet: Header Type=%d, Size=%d, Data ID=%d, VoteID=%d\n"), debugHeader->type, debugHeader->size, debugVoteData->id, debugVoteData->idTarget));
+    
+    send(*cachedSocket, tempBuffer, packetHeaderSize + sizeof(Packet::Payload::VOTE_DATA), 0);
+}
+
+void ASHNetPlayerController::ApplyVoteResult()
+{
+
+}
+
+void ASHNetPlayerController::KickPlayer()
+{
+
+}
+
+void ASHNetPlayerController::SendMissionClear(int missionId_)
+{
+    header.type = 5;
+    header.size = packetHeaderSize + sizeof(Packet::Payload::MISSION_PROCESS_DATA);
+
+    Packet::Payload::MISSION_PROCESS_DATA missionProcessData;
+    missionProcessData.id = cachedID;
+    missionProcessData.missionId = missionId_;
+
+    char tempBuffer[64] = { 0 };
+    memcpy(tempBuffer, &header, packetHeaderSize);
+    memcpy(tempBuffer + packetHeaderSize, &missionProcessData, sizeof(Packet::Payload::MISSION_PROCESS_DATA));
+
+    Packet::Header::DEFAULT* debugHeader = reinterpret_cast<Packet::Header::DEFAULT*>(tempBuffer);
+    Packet::Payload::MISSION_PROCESS_DATA* debugMissionProcessData = reinterpret_cast<Packet::Payload::MISSION_PROCESS_DATA*>(tempBuffer + packetHeaderSize);
+    //printf("Send Packet: Header Type=%d, Size=%d, Data VoteID=%d\n", debugHeader->type, debugHeader->size, debugVoteData->idTarget);
+    GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Blue, FString::Printf(TEXT("Send Packet: Header Type=%d, Size=%d, Data ID=%d, MissionID=%d\n"), debugHeader->type, debugHeader->size, debugMissionProcessData->id, debugMissionProcessData->missionId));
+}
+
+void ASHNetPlayerController::SendKilledPlayerId(int idKilled_)
+{
+    header.type = 5;
+    header.size = packetHeaderSize + sizeof(Packet::Payload::IMPOSTER_KILL);
+
+    Packet::Payload::IMPOSTER_KILL imposterKillData;
+    imposterKillData.id = cachedID;
+    imposterKillData.idKilled = idKilled_;
+
+    char tempBuffer[64] = { 0 };
+    memcpy(tempBuffer, &header, packetHeaderSize);
+    memcpy(tempBuffer + packetHeaderSize, &imposterKillData, sizeof(Packet::Payload::IMPOSTER_KILL));
+
+    Packet::Header::DEFAULT* debugHeader = reinterpret_cast<Packet::Header::DEFAULT*>(tempBuffer);
+    Packet::Payload::IMPOSTER_KILL* debugImposterKill = reinterpret_cast<Packet::Payload::IMPOSTER_KILL*>(tempBuffer + packetHeaderSize);
+    //printf("Send Packet: Header Type=%d, Size=%d, Data VoteID=%d\n", debugHeader->type, debugHeader->size, debugVoteData->idTarget);
+    GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Blue, FString::Printf(TEXT("Send Packet: Header Type=%d, Size=%d, Data ID=%d, MissionID=%d\n"), debugHeader->type, debugHeader->size, debugImposterKill->id, debugImposterKill->idKilled));
 }

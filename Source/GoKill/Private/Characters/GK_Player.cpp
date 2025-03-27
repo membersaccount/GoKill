@@ -11,6 +11,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMesh.h"
 #include "../../../../Plugins/Runtime/XRBase/Source/XRBase/Public/HeadMountedDisplayFunctionLibrary.h"
+#include "Network/SHNetPlayerController.h"
 
 AGK_Player::AGK_Player()
 {
@@ -62,7 +63,12 @@ void AGK_Player::BeginPlay()
 
     missions.MissionHandout(this, 4);
     //MissionHandler* mHandler = new MissionHandler();
-    //mHandler->MissionHandout(this, 4);
+    //mHandler->MissionHandout(this, 4)
+
+    ASHNetPlayerController* PC = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
+    if (!PC)
+        return;
+    PC->SendVoteData(1);
 }
 
 void AGK_Player::Tick(float DeltaTime)

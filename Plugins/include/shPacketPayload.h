@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <cstdint>
 
@@ -32,6 +32,29 @@ namespace Packet
 			float vy;
 			float vz;
 		};
+
+        struct VOTE_DATA      // Type 3
+        {
+            int id;
+            int idTarget;
+        };
+
+        struct VOTE_RESULT      // Type 4
+        {
+            int idKick;
+        };
+
+        struct MISSION_PROCESS_DATA      // Type 5 -> 나중에 RPC나 API 호출로 변경
+        {
+            int id;
+            int missionId;
+        };
+
+        struct IMPOSTER_KILL        // Type 6
+        {
+            int id;
+            int idKilled;
+        };
 	}
 }
 #pragma pack()
