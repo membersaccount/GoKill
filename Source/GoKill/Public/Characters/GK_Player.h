@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Characters/GK_CharacterBase.h"
 #include <Windows.h>
+#include "Missions/MissionHandler.h"
 #include "GK_Player.generated.h"
 
 class UInputMappingContext;
@@ -68,4 +69,5 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* SelectAction;
 
+    MissionHandler missions;
 };

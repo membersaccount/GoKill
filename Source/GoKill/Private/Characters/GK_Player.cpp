@@ -11,7 +11,6 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMesh.h"
 #include "../../../../Plugins/Runtime/XRBase/Source/XRBase/Public/HeadMountedDisplayFunctionLibrary.h"
-//#include "Missions/MissionHandler.h"
 
 AGK_Player::AGK_Player()
 {
@@ -61,6 +60,7 @@ void AGK_Player::BeginPlay()
         UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
     }
 
+    missions.MissionHandout(this, 4);
     //MissionHandler* mHandler = new MissionHandler();
     //mHandler->MissionHandout(this, 4);
 }
