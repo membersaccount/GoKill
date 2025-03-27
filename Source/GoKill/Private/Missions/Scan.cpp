@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Characters/GK_Player.h"
 #include "shDebug.h"
+#include "Missions/MissionHandler.h"
 
 // Sets default values
 AScan::AScan()
@@ -21,7 +22,7 @@ AScan::AScan()
 
     }
 
-    MissionId = 2;
+    MissionId = 1;
     MissionName = "Scan";
 }
 
@@ -73,7 +74,7 @@ void AScan::Tick(float DeltaTime)
             Print("UNKNOWN", FColor::Blue);
         }
 
-        MissionSuccess();
+        mHandler->MissionClear();
         OverlapEventEnd(activePlayer);
         StartPlayerId = -1;
         CurrentTime = 0.0f;

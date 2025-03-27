@@ -7,6 +7,7 @@
 #include "Components/Button.h"
 #include "shDebug.h"
 #include "Kismet/GameplayStatics.h"
+#include "Missions/MissionHandler.h"
 
 void UUnlockManifoldsWidget::NativeConstruct()
 {
@@ -63,7 +64,6 @@ void UUnlockManifoldsWidget::CheckBtn()
         }
     }
     bSuccess = true;
-    // 미션 성공 처리
 }
 
 void UUnlockManifoldsWidget::ShuffleTArray(TArray<int32>& Array)
