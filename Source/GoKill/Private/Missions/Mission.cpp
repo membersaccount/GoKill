@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Missions/MissionHandler.h"
+#include "Data/MissionData.h"
 
 // Sets default values
 AMission::AMission()
@@ -22,7 +23,7 @@ AMission::AMission()
 	// overlap, mesh, ui 사이즈 위치는 블루프린트에서 조정해보고 설정
 	OverlapComp = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapComp"));
 	OverlapComp->SetupAttachment(RootComponent);
-
+    
 	OverlapComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	OverlapComp->SetCollisionResponseToAllChannels(ECR_Ignore);
 	OverlapComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
@@ -61,7 +62,7 @@ bool AMission::OverlapEventBegin(AActor* OtherActor)
 		// 1. 플레이어 임무 권한 확인
         bool bCan = false;
         for (int i = 0; i < pl->MissionList.Num(); i++) {
-            if (MissionId == pl->MissionList[i] && !pl->MissionCompleted[i]) {
+            if (MissionId == pl->MissionList[i].Id && !pl->MissionList[i].Completed) {
                 // 플레이어한테 임무 권한이 있고 아직 해당 임무를 수행 안했을 경우
                 bCan = true;
                 MissionListIdx = i;
@@ -165,4 +166,9 @@ void AMission::MissionFocusOn()
 int32 AMission::GetMissionId()
 {
     return MissionId;
+}
+
+FString AMission::GetMissionName()
+{
+    return MissionName;
 }

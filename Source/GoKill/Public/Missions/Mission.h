@@ -73,4 +73,7 @@ public:
 
     // 미션 식별자 조회
     int32 GetMissionId();
+
+    // 미션명 조회
+    FString GetMissionName();
 };

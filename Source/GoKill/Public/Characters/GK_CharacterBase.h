@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Data/GKEnums.h"
+#include "Data/MissionData.h"
 #include "GK_CharacterBase.generated.h"
 
 UCLASS()
@@ -22,8 +23,7 @@ public:
 
 public:
     int PlayerId = -1;
-    TArray<int32> MissionList;
-    TArray<bool> MissionCompleted;
+    TArray<MissionInfo> MissionList;
     CharacterState GetState();
     void SetState(CharacterState state_);
     CharacterMission GetMission();
