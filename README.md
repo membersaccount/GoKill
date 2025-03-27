@@ -20,7 +20,7 @@ Meta XR Simulator v72
 4. Meta XR Simulator v72 압축풀기
 5. 언리얼 프로젝트 실행 후 Project Settings -> Plugins -> Meta XR -> Meta XR Simulator JSON File 에서 압축 해제한 package 에서 MetaXRSimulator -> meta_openxr_simulator.json 파일 선택
 
-### MexaXR 시뮬레이터 사용
+### MetaXR 시뮬레이터 사용
 - VR 기기 없이 VR 시뮬레이터 사용
 Viewport 윗줄 -> Meta XR Simulator -> Meta XR Simulator 체크
 
