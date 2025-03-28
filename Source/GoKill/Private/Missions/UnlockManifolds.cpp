@@ -19,7 +19,8 @@ AUnlockManifolds::AUnlockManifolds()
 	ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
 	if (TempMesh.Succeeded()) {
 		MeshComp->SetStaticMesh(TempMesh.Object);
-
+        MeshComp->SetRelativeLocation(FVector(0, 0, 80));
+        MeshComp->SetRelativeScale3D(FVector(0.02f, 0.5f, 0.25f));
 	}
 
     // UWidgetComponent
@@ -29,7 +30,7 @@ AUnlockManifolds::AUnlockManifolds()
     ConstructorHelpers::FClassFinder<UUnlockManifoldsWidget> TempWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/RGY/Blueprints/Mission/WBP_UnlockManifoldsPad.WBP_UnlockManifoldsPad_C'"));
     if (TempWidget.Succeeded()) {
         BtnComp->SetWidgetClass(TempWidget.Class);
-        BtnComp->SetRelativeLocation(FVector(51.0f, -39.0f, -107.0f));
+        BtnComp->SetRelativeLocation(FVector(51.0f, -39.0f, -32.0f));
         BtnComp->SetRelativeScale3D(FVector(1.0f, 0.35f, 0.8f));
     }
 

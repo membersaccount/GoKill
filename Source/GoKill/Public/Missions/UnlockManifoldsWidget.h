@@ -18,14 +18,18 @@ public:
     virtual void NativeConstruct() override;
 	
 public:
+    // 보이는 버튼 순서
     TArray<int32> btnNum = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
+    // 누른 버튼 순서
     TArray<int32> pressedNum;
 
     bool bSuccess = false;
 
-    // BindWidget 배열 같은걸로 못하나..
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    class UTextBlock* PressedText;
 
+    // BindWidget 배열 같은걸로 못하나..
     UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* BtnText1;
 

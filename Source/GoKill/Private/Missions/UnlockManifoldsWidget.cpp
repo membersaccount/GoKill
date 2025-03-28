@@ -44,6 +44,7 @@ void UUnlockManifoldsWidget::ResetBtn()
     BtnText8->SetText(FText::AsNumber(btnNum[7]));
     BtnText9->SetText(FText::AsNumber(btnNum[8]));
     BtnText10->SetText(FText::AsNumber(btnNum[9]));
+    PressedText->SetText(FText::FromString("Pressed Button"));
 
     // pressedNum 초기화
     pressedNum.Empty();
@@ -54,8 +55,9 @@ void UUnlockManifoldsWidget::ResetBtn()
 
 void UUnlockManifoldsWidget::CheckBtn()
 {
+    PressedText->SetText(FText::FromString("Pressed Button"));
     for (int i = 0; i < 10; i++) {
-        if (btnNum[pressedNum[i] - 1] != i + 1) {
+        if (pressedNum[i] != i + 1) {
             bSuccess = false;
             // 미션 실패 처리
             Print("Mission Failed", FColor::Red);
@@ -92,7 +94,8 @@ void UUnlockManifoldsWidget::ShuffleTArray(TArray<int32>& Array)
 
 void UUnlockManifoldsWidget::PressedBtn1()
 {
-    Print(FString::FormatAsNumber(pressedNum.Num()), FColor::Red);
+    pressedNum.Add(btnNum[0]);
+    PressedText->SetText(FText::AsNumber(btnNum[0]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -100,7 +103,8 @@ void UUnlockManifoldsWidget::PressedBtn1()
 
 void UUnlockManifoldsWidget::PressedBtn2()
 {
-    pressedNum.Add(2);
+    pressedNum.Add(btnNum[1]);
+    PressedText->SetText(FText::AsNumber(btnNum[1]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -108,7 +112,8 @@ void UUnlockManifoldsWidget::PressedBtn2()
 
 void UUnlockManifoldsWidget::PressedBtn3()
 {
-    pressedNum.Add(3);
+    pressedNum.Add(btnNum[2]);
+    PressedText->SetText(FText::AsNumber(btnNum[2]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -116,7 +121,8 @@ void UUnlockManifoldsWidget::PressedBtn3()
 
 void UUnlockManifoldsWidget::PressedBtn4()
 {
-    pressedNum.Add(4);
+    pressedNum.Add(btnNum[3]);
+    PressedText->SetText(FText::AsNumber(btnNum[3]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -124,7 +130,8 @@ void UUnlockManifoldsWidget::PressedBtn4()
 
 void UUnlockManifoldsWidget::PressedBtn5()
 {
-    pressedNum.Add(5);
+    pressedNum.Add(btnNum[4]);
+    PressedText->SetText(FText::AsNumber(btnNum[4]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -132,7 +139,8 @@ void UUnlockManifoldsWidget::PressedBtn5()
 
 void UUnlockManifoldsWidget::PressedBtn6()
 {
-    pressedNum.Add(6);
+    pressedNum.Add(btnNum[5]);
+    PressedText->SetText(FText::AsNumber(btnNum[5]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -140,7 +148,8 @@ void UUnlockManifoldsWidget::PressedBtn6()
 
 void UUnlockManifoldsWidget::PressedBtn7()
 {
-    pressedNum.Add(7);
+    pressedNum.Add(btnNum[6]);
+    PressedText->SetText(FText::AsNumber(btnNum[6]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -148,7 +157,8 @@ void UUnlockManifoldsWidget::PressedBtn7()
 
 void UUnlockManifoldsWidget::PressedBtn8()
 {
-    pressedNum.Add(8);
+    pressedNum.Add(btnNum[7]);
+    PressedText->SetText(FText::AsNumber(btnNum[7]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -156,7 +166,8 @@ void UUnlockManifoldsWidget::PressedBtn8()
 
 void UUnlockManifoldsWidget::PressedBtn9()
 {
-    pressedNum.Add(9);
+    pressedNum.Add(btnNum[8]);
+    PressedText->SetText(FText::AsNumber(btnNum[8]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }
@@ -164,7 +175,8 @@ void UUnlockManifoldsWidget::PressedBtn9()
 
 void UUnlockManifoldsWidget::PressedBtn10()
 {
-    pressedNum.Add(10);
+    pressedNum.Add(btnNum[9]);
+    PressedText->SetText(FText::AsNumber(btnNum[9]));
     if (pressedNum.Num() == 10) {
         CheckBtn();
     }

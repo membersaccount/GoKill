@@ -19,7 +19,7 @@ MissionHandler::MissionHandler()
     manifolds.Id = 2;
     manifolds.Name = "Unlock Manifolds";
 
-    MissionDataList = { scan, manifolds };
+    MissionDataList = { scan, manifolds, manifolds };
     //*/
 }
 
