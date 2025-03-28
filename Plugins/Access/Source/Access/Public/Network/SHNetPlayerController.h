@@ -60,6 +60,4 @@ private:
 	Packet::Header::DEFAULT header;
 	Packet::Payload::MOVEMENT movement;
     int packetHeaderSize = sizeof(Packet::Header::DEFAULT);
-
-	//bool SpawnTest = true;
 };

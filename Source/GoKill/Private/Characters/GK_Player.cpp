@@ -114,6 +114,7 @@ void AGK_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &AGK_Player::Grab);
 	EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Started, this, &AGK_Player::Select);
 	EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Completed, this, &AGK_Player::ReleaseSelect);
+    EnhancedInputComponent->BindAction(TestKill_Action, ETriggerEvent::Started, this, &AGK_Player::TestKill);
 }
 
 void AGK_Player::Move(const FInputActionValue& Value)
@@ -170,4 +171,8 @@ FVector AGK_Player::GetCameraLocation()
 void AGK_Player::SetCameraRotation(FRotator CameraRotation_)
 {
     FollowCamera->SetWorldRotation(CameraRotation_);
+}
+
+void AGK_Player::TestKill(const FInputActionValue& Value)
+{
 }

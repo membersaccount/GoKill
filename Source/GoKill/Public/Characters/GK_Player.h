@@ -81,9 +81,5 @@ private: // test
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* TestKill_Action;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-    UInputAction* TestVote_Action;
-
     void TestKill(const FInputActionValue& Value);
-    void TestVote(const FInputActionValue& Value);
 };
