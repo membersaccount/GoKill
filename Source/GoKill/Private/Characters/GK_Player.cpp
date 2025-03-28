@@ -33,6 +33,7 @@ AGK_Player::AGK_Player()
     ConstructorHelpers::FObjectFinder<USkeletalMesh>TempLeftHand(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_left.SKM_MannyXR_left'"));
     if (TempLeftHand.Succeeded()) {
         LeftHandSK->SetSkeletalMesh(TempLeftHand.Object);
+        LeftHandSK->SetRelativeRotation(FRotator(-180, 90, -45));
     }
 
     RightHand = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightHand"));
@@ -45,6 +46,7 @@ AGK_Player::AGK_Player()
     ConstructorHelpers::FObjectFinder<USkeletalMesh>TempRightHand(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_right.SKM_MannyXR_right'"));
     if (TempRightHand.Succeeded()) {
         RightHandSK->SetSkeletalMesh(TempRightHand.Object);
+        RightHandSK->SetRelativeRotation(FRotator(0, 90, 45));
     }
 }
 

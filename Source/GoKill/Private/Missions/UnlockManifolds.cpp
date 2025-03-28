@@ -19,7 +19,7 @@ AUnlockManifolds::AUnlockManifolds()
 	ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
 	if (TempMesh.Succeeded()) {
 		MeshComp->SetStaticMesh(TempMesh.Object);
-        MeshComp->SetRelativeLocation(FVector(0, 0, 150));
+        MeshComp->SetRelativeLocation(FVector(0.0f, 0.0f, 160.0f));
         MeshComp->SetRelativeScale3D(FVector(0.02f, 0.5f, 0.25f));
 	}
 
