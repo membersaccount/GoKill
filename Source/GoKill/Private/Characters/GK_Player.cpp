@@ -105,6 +105,8 @@ void AGK_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGK_Player::Look);
 	EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &AGK_Player::Grab);
 	EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Started, this, &AGK_Player::Select);
+    EnhancedInputComponent->BindAction(TestKill_Action, ETriggerEvent::Started, this, &AGK_Player::TestKill);
+    EnhancedInputComponent->BindAction(TestVote_Action, ETriggerEvent::Started, this, &AGK_Player::TestVote);
 }
 
 void AGK_Player::Move(const FInputActionValue& Value)
@@ -155,4 +157,14 @@ FVector AGK_Player::GetCameraLocation()
 void AGK_Player::SetCameraRotation(FRotator CameraRotation_)
 {
     FollowCamera->SetWorldRotation(CameraRotation_);
+}
+
+void AGK_Player::TestKill(const FInputActionValue& Value)
+{
+
+}
+
+void AGK_Player::TestVote(const FInputActionValue& Value)
+{
+
 }
