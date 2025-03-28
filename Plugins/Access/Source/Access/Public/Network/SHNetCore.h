@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 
@@ -42,8 +42,6 @@ public:
 	Buffer::SendBuffer sendBuffer;
 
 	int SetGameInstanceCount = 0;
-
-    int RunCount = 0;
 
 private:
 	static SHNetCore* networkSystem;

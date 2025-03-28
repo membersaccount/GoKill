@@ -28,11 +28,6 @@ SHNetCore* SHNetCore::GetInstance()
 
 bool SHNetCore::Run()
 {
-    if (RunCount != 0)
-    {
-        GEngine->AddOnScreenDebugMessage(0, 60.f, FColor::Red, TEXT("[ERROR] Network system called agin. Already running."));
-    }
-
 	if (Core::InitSock(&clientSocket, 1))
 	{
 		printf("InitSock() => Success\n");
@@ -54,8 +49,6 @@ bool SHNetCore::Run()
 	}
 
 	recvThread = std::thread(&SHNetCore::RecvThread, this);
-
-    ++RunCount;
 
 	return SUCCESS;
 }

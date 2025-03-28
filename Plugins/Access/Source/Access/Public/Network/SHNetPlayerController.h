@@ -45,8 +45,6 @@ public: // Imposter Kill
 public:
 	std::mutex movementMutex;
 	std::queue<Packet::Payload::MOVEMENT> movementWorks;
-    std::mutex kickMutex;
-    std::queue<int> kickWorks;
 	int cachedID;
 
 private:

@@ -18,7 +18,6 @@ void ASHNetPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-    GEngine->AddOnScreenDebugMessage(1, 60.f, FColor::Blue, TEXT("PlayerController Created"));
 	//cachedSocket = GetWorld()->GetGameInstance<USHNetGameInstance>()->cachedSocket;
 	cachedNetwork = GetWorld()->GetGameInstance<USHNetGameInstance>()->network;
 	cachedNetwork->Run();
@@ -35,14 +34,14 @@ void ASHNetPlayerController::Tick(float DeltaTime)
 	if (cachedID < 1)
 	{
 		cachedID = GetWorld()->GetGameInstance<USHNetGameInstance>()->clientID;
-		GEngine->AddOnScreenDebugMessage(2, 0.5f, FColor::Red, TEXT("ID is -1"));
+		GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("ID is -1"));
 		return;
 	}
 
 	SendSelfMovement();
 	UpdateOtherPlayerMovement();
 
-	//GEngine->AddOnScreenDebugMessage(1, 0.5f, FColor::Magenta, FString::Printf(TEXT("Socket: %d, SelfID: %d"), static_cast<int>(*cachedSocket), cachedID));
+	//GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Magenta, FString::Printf(TEXT("Socket: %d, SelfID: %d"), static_cast<int>(*cachedSocket), cachedID));
 	//GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Cyan, FString::Printf(TEXT("OtherCharacters: %d"), otherPlayers.size()));
 }
 
@@ -83,7 +82,7 @@ void ASHNetPlayerController::SendSelfMovement()
 
 	Packet::Header::DEFAULT* debugHeader = reinterpret_cast<Packet::Header::DEFAULT*>(tempBuffer);
 	Packet::Payload::MOVEMENT* debugMovement = reinterpret_cast<Packet::Payload::MOVEMENT*>(tempBuffer + packetHeaderSize);
-	printf("Send Packet: Header Type=%d, Size=%d, Data ID=%d, X=%f, Y=%f, Z=%f, Pitch=%f, Yaw=%f, Roll=%f, Vx=%f, Vy=%f, Vz=%f\n", debugHeader->type, debugHeader->size, debugMovement->id, debugMovement->x, debugMovement->y, debugMovement->z, debugMovement->Pitch, debugMovement->Yaw, debugMovement->Roll, debugMovement->vx, debugMovement->vy, debugMovement->vz);
+	//printf("Send Packet: Header Type=%d, Size=%d, Data ID=%d, X=%f, Y=%f, Z=%f, Pitch=%f, Yaw=%f, Roll=%f, Vx=%f, Vy=%f, Vz=%f\n", debugHeader->type, debugHeader->size, debugMovement->id, debugMovement->x, debugMovement->y, debugMovement->z, debugMovement->Pitch, debugMovement->Yaw, debugMovement->Roll, debugMovement->vx, debugMovement->vy, debugMovement->vz);
 
 	send(*cachedSocket, tempBuffer, packetHeaderSize + sizeof(Packet::Payload::MOVEMENT), 0);
 }
@@ -137,7 +136,7 @@ void ASHNetPlayerController::SendVoteData(int id_)
     //printf("Send Packet: Header Type=%d, Size=%d, Data VoteID=%d\n", debugHeader->type, debugHeader->size, debugVoteData->idTarget);
     GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Blue, FString::Printf(TEXT("Send Packet: Header Type=%d, Size=%d, Data ID=%d, VoteID=%d\n"), debugHeader->type, debugHeader->size, debugVoteData->id, debugVoteData->idTarget));
     
-    //send(*cachedSocket, tempBuffer, packetHeaderSize + sizeof(Packet::Payload::VOTE_DATA), 0);
+    send(*cachedSocket, tempBuffer, packetHeaderSize + sizeof(Packet::Payload::VOTE_DATA), 0);
 }
 
 void ASHNetPlayerController::ApplyVoteResult()
