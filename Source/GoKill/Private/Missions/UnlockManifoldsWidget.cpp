@@ -66,6 +66,7 @@ void UUnlockManifoldsWidget::CheckBtn()
         }
     }
     bSuccess = true;
+    PressedText->SetText(FText::FromString("Success"));
 }
 
 void UUnlockManifoldsWidget::ShuffleTArray(TArray<int32>& Array)

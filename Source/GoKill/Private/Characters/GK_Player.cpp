@@ -12,6 +12,7 @@
 #include "Engine/SkeletalMesh.h"
 #include "../../../../Plugins/Runtime/XRBase/Source/XRBase/Public/HeadMountedDisplayFunctionLibrary.h"
 #include "Network/SHNetPlayerController.h"
+#include "Components/WidgetInteractionComponent.h"
 
 AGK_Player::AGK_Player()
 {
@@ -33,7 +34,7 @@ AGK_Player::AGK_Player()
     ConstructorHelpers::FObjectFinder<USkeletalMesh>TempLeftHand(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_left.SKM_MannyXR_left'"));
     if (TempLeftHand.Succeeded()) {
         LeftHandSK->SetSkeletalMesh(TempLeftHand.Object);
-        LeftHandSK->SetRelativeRotation(FRotator(-180, 90, -45));
+        LeftHandSK->SetRelativeRotation(FRotator(-25, -180, 90));
     }
 
     RightHand = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightHand"));
@@ -46,8 +47,15 @@ AGK_Player::AGK_Player()
     ConstructorHelpers::FObjectFinder<USkeletalMesh>TempRightHand(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_right.SKM_MannyXR_right'"));
     if (TempRightHand.Succeeded()) {
         RightHandSK->SetSkeletalMesh(TempRightHand.Object);
-        RightHandSK->SetRelativeRotation(FRotator(0, 90, 45));
+        RightHandSK->SetRelativeRotation(FRotator(25, 0, 90));
     }
+
+    RightAim = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightAim"));
+    RightAim->SetupAttachment(RootComponent);
+    RightAim->SetTrackingMotionSource(TEXT("RightAim"));
+
+    WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
+    WidgetInteractionComp->SetupAttachment(RightAim);
 }
 
 void AGK_Player::BeginPlay()
@@ -105,6 +113,7 @@ void AGK_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGK_Player::Look);
 	EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &AGK_Player::Grab);
 	EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Started, this, &AGK_Player::Select);
+	EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Completed, this, &AGK_Player::ReleaseSelect);
 }
 
 void AGK_Player::Move(const FInputActionValue& Value)
@@ -140,6 +149,12 @@ void AGK_Player::Grab(const FInputActionValue& Value)
 void AGK_Player::Select(const FInputActionValue& Value)
 {
     Called();
+    WidgetInteractionComp->PressPointerKey(EKeys::LeftMouseButton);
+}
+
+void AGK_Player::ReleaseSelect(const FInputActionValue& value)
+{
+    WidgetInteractionComp->ReleasePointerKey(EKeys::LeftMouseButton);
 }
 
 UCameraComponent* AGK_Player::GetPlayerCamera()
