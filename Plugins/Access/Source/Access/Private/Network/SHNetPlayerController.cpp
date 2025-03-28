@@ -34,14 +34,14 @@ void ASHNetPlayerController::Tick(float DeltaTime)
 	if (cachedID < 1)
 	{
 		cachedID = GetWorld()->GetGameInstance<USHNetGameInstance>()->clientID;
-		GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("ID is -1"));
+		GEngine->AddOnScreenDebugMessage(1, 0.5f, FColor::Red, TEXT("ID is -1"));
 		return;
 	}
 
 	SendSelfMovement();
 	UpdateOtherPlayerMovement();
 
-	//GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Magenta, FString::Printf(TEXT("Socket: %d, SelfID: %d"), static_cast<int>(*cachedSocket), cachedID));
+	GEngine->AddOnScreenDebugMessage(2, 0.5f, FColor::Magenta, FString::Printf(TEXT("Socket: %d, SelfID: %d"), static_cast<int>(*cachedSocket), cachedID));
 	//GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Cyan, FString::Printf(TEXT("OtherCharacters: %d"), otherPlayers.size()));
 }
 
