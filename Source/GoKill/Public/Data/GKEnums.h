@@ -1,20 +1,16 @@
-﻿#pragma once
-
-#include "CoreMinimal.h"
+#pragma once
 
 namespace Character
 {
 	namespace State
 	{
-        UENUM()
-		enum class STATE : int32
+		enum class STATE
 		{
 			Dead,
 			CrewMember,
 			Imposter,
 		};
 
-        UENUM()
 		enum class MISSION
 		{
 			NotStarted,
