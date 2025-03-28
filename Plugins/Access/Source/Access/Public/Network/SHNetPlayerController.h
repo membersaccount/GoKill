@@ -30,11 +30,23 @@ public:
 	void SendSelfMovement();
 	void UpdateOtherPlayerMovement();
 
-    //void SendVote
+
+public: // Vote
+    void SendVoteData(int id_);
+    void ApplyVoteResult();
+    void KickPlayer();
+
+public: // Mission
+    void SendMissionClear(int missionId_);
+
+public: // Imposter Kill
+    void SendKilledPlayerId(int idKilled_);
 
 public:
 	std::mutex movementMutex;
 	std::queue<Packet::Payload::MOVEMENT> movementWorks;
+    std::mutex kickMutex;
+    std::queue<int> kickWorks;
 	int cachedID;
 
 private:
@@ -49,6 +61,7 @@ private:
 
 	Packet::Header::DEFAULT header;
 	Packet::Payload::MOVEMENT movement;
+    int packetHeaderSize = sizeof(Packet::Header::DEFAULT);
 
 	//bool SpawnTest = true;
 };

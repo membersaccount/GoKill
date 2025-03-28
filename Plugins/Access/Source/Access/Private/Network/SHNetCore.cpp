@@ -1,4 +1,4 @@
-#include "Network/SHNetCore.h"
+﻿#include "Network/SHNetCore.h"
 #include "shPacketHandler.h"
 
 #include "Network/SHNetGameInstance.h"
@@ -28,6 +28,11 @@ SHNetCore* SHNetCore::GetInstance()
 
 bool SHNetCore::Run()
 {
+    if (RunCount != 0)
+    {
+        GEngine->AddOnScreenDebugMessage(0, 60.f, FColor::Red, TEXT("[ERROR] Network system called agin. Already running."));
+    }
+
 	if (Core::InitSock(&clientSocket, 1))
 	{
 		printf("InitSock() => Success\n");
@@ -49,6 +54,8 @@ bool SHNetCore::Run()
 	}
 
 	recvThread = std::thread(&SHNetCore::RecvThread, this);
+
+    ++RunCount;
 
 	return SUCCESS;
 }
@@ -159,7 +166,6 @@ void SHNetCore::RecvThread()
 				printf("Recv Packet: Header Type=%d, Size=%d, Data ID=%d\n", header->type, header->size, newPlayerData->id);
 
 				cachedGameInstance->clientID = newPlayerData->id;
-
 			}
 			break;
 			case 2:
@@ -184,10 +190,20 @@ void SHNetCore::RecvThread()
 				}
 
 				std::lock_guard<std::mutex> lock(cachedController->movementMutex);
-				cachedController->movementWorks.push(*movementData);
-
+                cachedController->movementWorks.push(*movementData);
 			}
 			break;
+            case 3:
+                printf("Recv Packet type (VOTE_DATA) not allowed");
+            break;
+            case 4:
+            {
+
+            }
+            break;
+            case 5:
+                printf("Recv Packet type (MISSION_PROCESS_DATA) not allowed");
+            break;
 			default:
 				printf("Unknown Packet Type\n");
 				break;
