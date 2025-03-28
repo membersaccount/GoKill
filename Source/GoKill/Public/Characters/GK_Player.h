@@ -30,6 +30,7 @@ public:
 	void Look(const FInputActionValue& Value);
 	void Grab(const FInputActionValue& Value);
 	void Select(const FInputActionValue& Value);
+    void ReleaseSelect(const FInputActionValue& value);
 
 public: // Camera Settings
     UCameraComponent* GetPlayerCamera();
@@ -52,6 +53,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = MotionController, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* RightHandSK;
+
+    UPROPERTY(VisibleAnywhere, Category = MotionController, meta = (AllowPrivateAccess = "true"))
+	class UMotionControllerComponent* RightAim;
+
+	UPROPERTY(VisibleAnywhere, Category = Widget, meta = (AllowPrivateAccess = "true"))
+	class UWidgetInteractionComponent* WidgetInteractionComp;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;

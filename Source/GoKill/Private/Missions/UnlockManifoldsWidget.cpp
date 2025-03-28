@@ -28,6 +28,8 @@ void UUnlockManifoldsWidget::NativeConstruct()
 
 void UUnlockManifoldsWidget::ResetBtn()
 {
+    // pressedNum 초기화
+    pressedNum.Empty();
 
     // btn 을 무작위로 배열
     //UKismetArrayLibrary::GenericArray_Shuffle(&btnNum, FArrayProperty);
@@ -46,9 +48,6 @@ void UUnlockManifoldsWidget::ResetBtn()
     BtnText10->SetText(FText::AsNumber(btnNum[9]));
     PressedText->SetText(FText::FromString("Pressed Button"));
 
-    // pressedNum 초기화
-    pressedNum.Empty();
-
     // 버튼 누르기 성공 여부 초기화
     bSuccess = false;
 }
@@ -66,6 +65,7 @@ void UUnlockManifoldsWidget::CheckBtn()
         }
     }
     bSuccess = true;
+    PressedText->SetText(FText::FromString("Success"));
 }
 
 void UUnlockManifoldsWidget::ShuffleTArray(TArray<int32>& Array)
