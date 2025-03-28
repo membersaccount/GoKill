@@ -100,5 +100,7 @@ void AUnlockManifolds::OnMissionEndOverlap(UPrimitiveComponent* OverlappedCompon
 
     if (missionEnd) {
         // 미션 초기화
+        if(BtnWidget == nullptr) return;
+        BtnWidget->ResetBtn();
     }
 }
