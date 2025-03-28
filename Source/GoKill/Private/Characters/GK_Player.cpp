@@ -13,10 +13,6 @@
 #include "../../../../Plugins/Runtime/XRBase/Source/XRBase/Public/HeadMountedDisplayFunctionLibrary.h"
 #include "Network/SHNetPlayerController.h"
 
-#include "Components/ChildActorComponent.h"
-#include "Haptics/HapticFeedbackEffect_Curve.h"
-#include "Components/WidgetInteractionComponent.h"
-
 AGK_Player::AGK_Player()
 {
     PrimaryActorTick.bCanEverTick = true;
@@ -34,10 +30,6 @@ AGK_Player::AGK_Player()
     LeftHandSK = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("LeftHandSK"));
     LeftHandSK->SetupAttachment(LeftHand);
 
-    RightAim = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("RightAim"));
-    RightAim->SetupAttachment(RootComponent);
-    RightAim->SetTrackingMotionSource(TEXT("RightAim"));
-
     ConstructorHelpers::FObjectFinder<USkeletalMesh>TempLeftHand(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_left.SKM_MannyXR_left'"));
     if (TempLeftHand.Succeeded()) {
         LeftHandSK->SetSkeletalMesh(TempLeftHand.Object);
@@ -54,22 +46,6 @@ AGK_Player::AGK_Player()
     if (TempRightHand.Succeeded()) {
         RightHandSK->SetSkeletalMesh(TempRightHand.Object);
     }
-
-    ImposterKillUI = CreateDefaultSubobject<UChildActorComponent>(TEXT("ImposterKill"));
-    ImposterKillUI->SetupAttachment(RootComponent);
-    ConstructorHelpers::FClassFinder<AActor> TempKillUI(TEXT("/Script/Engine.Blueprint'/Game/YSH/UI/BP_ImposterKIll.BP_ImposterKIll_C'"));
-    if (TempKillUI.Succeeded())
-    {
-        ImposterKillUI->SetChildActorClass(TempKillUI.Class);
-    }
-    ConstructorHelpers::FObjectFinder<UHapticFeedbackEffect_Curve> TempHaptic(TEXT("/Script/Engine.HapticFeedbackEffect_Curve'/Game/YSH/Haptic/HFC_Kill.HFC_Kill'"));
-    if (TempHaptic.Succeeded())
-    {
-        KillHaptic = TempHaptic.Object;
-    }
-
-    WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
-    WidgetInteractionComp->SetupAttachment(RightAim);
 }
 
 void AGK_Player::BeginPlay()
