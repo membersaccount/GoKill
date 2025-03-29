@@ -55,14 +55,24 @@ void AUnlockManifolds::Tick(float DeltaTime)
 
 
     if(BtnWidget == nullptr) return;
-    if (activePlayer != nullptr && !bSuccess) {
+    if (activePlayer != nullptr && bMissionProcessing && !bSuccess) {
         if (BtnWidget->bSuccess) {
             bSuccess = true;
             // 미션 진행도 늘리기
             mHandler->MissionClear();
 
             // 미션 종료
-            OverlapEventEnd(activePlayer);
+            bool end = OverlapEventEnd(activePlayer);
+            if(end) {
+                bWaiting = true;
+
+                GetWorldTimerManager().SetTimer(WaitingTimer, FTimerDelegate::CreateLambda([this]() -> void {
+                    BtnWidget->ResetBtn();
+                    bWaiting = false;
+
+                    GetWorldTimerManager().ClearTimer(WaitingTimer);
+                }), WaitingTime, true);
+            }
 
             Print("Mission Success", FColor::Blue);
         }
@@ -75,6 +85,8 @@ void AUnlockManifolds::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent
         Print("BtnWidget is nullptr", FColor::Red);
         return;
     }
+
+    if(bWaiting) return;
 
 	bool missionStart = OverlapEventBegin(OtherActor);
 

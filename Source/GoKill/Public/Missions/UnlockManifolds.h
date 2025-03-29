@@ -38,6 +38,14 @@ public:
 
     bool bSuccess = false;
 
+private:
+    UPROPERTY(EditAnywhere, Category = "Timer", meta = (AllowPrivateAccess=true))
+	float WaitingTime = 1.0f;
+
+    FTimerHandle WaitingTimer;
+
+    bool bWaiting = false;
+
 public:
 	UFUNCTION()
 	void OnMissionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
