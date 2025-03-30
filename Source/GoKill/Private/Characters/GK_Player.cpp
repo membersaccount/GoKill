@@ -20,7 +20,7 @@ AGK_Player::AGK_Player()
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(RootComponent);
-	FollowCamera->bUsePawnControlRotation = true;
+	FollowCamera->bUsePawnControlRotation = false;
 
 
     // 모션 컨트롤러 컴포넌트 추가
@@ -118,24 +118,26 @@ void AGK_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void AGK_Player::Move(const FInputActionValue& Value)
 {
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
 	if (Controller == nullptr)
 	{
 		return;
 	}
 
-    AddMovementInput(FollowCamera->GetForwardVector() * MovementVector.X + FollowCamera->GetRightVector() * MovementVector.Y);
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+    FVector dir = FollowCamera->GetForwardVector() * MovementVector.X + FollowCamera->GetRightVector() * MovementVector.Y;
+    FollowCamera->GetComponentTransform().TransformVector(dir);
+    AddMovementInput(dir);
 }
 
 void AGK_Player::Look(const FInputActionValue& Value)
 {
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
 	if (Controller == nullptr)
 	{
 		return;
 	}
+
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
 	AddControllerYawInput(LookAxisVector.X);
 	AddControllerPitchInput(LookAxisVector.Y);
