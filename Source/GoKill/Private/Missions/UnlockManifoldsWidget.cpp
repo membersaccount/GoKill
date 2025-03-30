@@ -58,6 +58,7 @@ void UUnlockManifoldsWidget::CheckBtn()
 
     if (pressedNum[now - 1] != now) {
         // 미션 실패 처리 (에러음, 리셋)
+        bError = true;
         Print("Mission Failed", FColor::Red);
         ResetBtn();
         return;

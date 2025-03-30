@@ -36,6 +36,18 @@ public:
     UPROPERTY()
 	class UUnlockManifoldsWidget* BtnWidget;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sound")
+    class USoundWave* OpenSound;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    class USoundWave* ErrorSound;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    class USoundAttenuation* Attenuation;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    class USoundConcurrency* Concurrency;
+
     bool bSuccess = false;
 
 private:

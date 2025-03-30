@@ -6,6 +6,7 @@
 #include "Characters/GK_Player.h"
 #include "shDebug.h"
 #include "Missions/MissionHandler.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AScan::AScan()
@@ -88,6 +89,7 @@ void AScan::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
     if (missionStart) {
         StartPlayerId = activePlayerId;
 
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(), ScanSound, GetActorLocation(), 1.0f, 1.0f, 2.0f, Attenuation, Concurrency);
         Print("Scan : Start", FColor::Green);
     }
 }
