@@ -158,9 +158,9 @@ void AMission::MissionFocusOn()
     activePlayer->AddControllerYawInput(AngleDegree);
     */
 
-    activePlayer->SetActorRotation(MissionDir.Rotation());
-    //auto pc = Cast<APlayerController>(activePlayer->GetController());
-    //pc->SetControlRotation(MissionDir.Rotation());
+    //activePlayer->SetActorRotation(MissionDir.Rotation());
+    auto pc = Cast<APlayerController>(activePlayer->GetController());
+    pc->SetControlRotation(MissionDir.Rotation());
 }
 
 int32 AMission::GetMissionId()
