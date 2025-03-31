@@ -128,7 +128,7 @@ void UEnemyFSM::MoveState()
     FPathFindingResult r = ns->FindPathSync(query);
 
     // 목적지까지 길 찾기 성공 여부 확인
-    if (r.Result == ENavigationQueryResult::Success && dir.Size() < 600) {
+    if (r.Result == ENavigationQueryResult::Success && dir.Size() < 700) {
         // 타겟으로 이동
         ai->MoveToLocation(destination);
     }

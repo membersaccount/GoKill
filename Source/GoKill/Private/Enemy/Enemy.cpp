@@ -33,7 +33,7 @@ AEnemy::AEnemy()
     }
 
     RightLegCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("RightLegCollision"));
-    RightLegCollision->SetupAttachment(GetMesh());
+    RightLegCollision->SetupAttachment(GetMesh(), TEXT("RightLegSocket"));
 
     RightLegCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     RightLegCollision->SetCollisionObjectType(ECC_Pawn);
