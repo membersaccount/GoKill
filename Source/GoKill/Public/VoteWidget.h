@@ -33,6 +33,8 @@ public:
     UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UButton* VoteBtn5;
 
+    bool hadVoted = false;
+
 public:
     UFUNCTION()
     void PressedBtn1();
@@ -48,4 +50,6 @@ public:
 
     UFUNCTION()
     void PressedBtn5();
+
+    void SendVote(int id_);
 };
