@@ -48,6 +48,8 @@ public:
     int baseIndex;
     std::queue<int> killWorks;
     std::atomic<int> updateIndex = -1;
+    std::atomic<bool> isGameStart = false;
+    std::atomic<bool> isImposter = false;
 
 private:
 	std::unordered_map<int, ACharacter*> otherPlayers;
