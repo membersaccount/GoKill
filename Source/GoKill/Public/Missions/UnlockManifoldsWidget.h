@@ -26,6 +26,8 @@ public:
 
     bool bSuccess = false;
 
+    bool bError = false;
+
     UPROPERTY(EditAnywhere, meta = (BindWidget))
     class UTextBlock* PressedText;
 

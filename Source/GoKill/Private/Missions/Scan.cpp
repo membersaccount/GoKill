@@ -6,6 +6,7 @@
 #include "Characters/GK_Player.h"
 #include "shDebug.h"
 #include "Missions/MissionHandler.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AScan::AScan()
@@ -16,7 +17,7 @@ AScan::AScan()
     MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
     MeshComp->SetupAttachment(RootComponent);
 
-    ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cylinder.Shape_Cylinder'"));
+    ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh(TEXT("/Script/Engine.StaticMesh'/Game/Clinic/Meshes/Props/SM_OfficeGroundMiddleDecor.SM_OfficeGroundMiddleDecor'"));
     if (TempMesh.Succeeded()) {
         MeshComp->SetStaticMesh(TempMesh.Object);
 
@@ -88,6 +89,7 @@ void AScan::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
     if (missionStart) {
         StartPlayerId = activePlayerId;
 
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(), ScanSound, GetActorLocation(), 1.0f, 1.0f, 2.0f, Attenuation, Concurrency);
         Print("Scan : Start", FColor::Green);
     }
 }

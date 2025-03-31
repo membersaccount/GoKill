@@ -26,3 +26,9 @@ Viewport 윗줄 -> Meta XR Simulator -> Meta XR Simulator 체크
 
 - VR 실행
 실행 햄버거 버튼 -> VR Preview
+
+### 서버 세팅
+프로젝트 폴더\Plugins\Access 에 있는 Binaries 제거 후 Generate Visual Studio project files
+
+## 테스트 서버 실행
+프로젝트 폴더\Plugins\server\TestServer_2503_ver121.exe 실행하고 프로젝트 실행
