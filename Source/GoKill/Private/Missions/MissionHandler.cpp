@@ -63,8 +63,10 @@ void MissionHandler::MissionClear()
         FString txt = b.Name + (b.Completed ? TEXT("(End)") : TEXT("(Ready)"));
         Print(txt, FColor::Green);
     }
-    // 이 부분 나중에 수정 필요
-    if(AllClear) activePlayer->GameOver();
+
+    if(AllClear) {
+        activePlayer->GameWin();
+    }
 }
 
 void MissionHandler::MissionHandoutAll(TArray<AGK_Player*> players, int numOfMissions)

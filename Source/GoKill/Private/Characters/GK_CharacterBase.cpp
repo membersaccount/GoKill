@@ -1,5 +1,6 @@
 ﻿#include "Characters/GK_CharacterBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AGK_CharacterBase::AGK_CharacterBase()
 {
@@ -45,7 +46,20 @@ void AGK_CharacterBase::SetMission(CharacterMission mission_)
 
 void AGK_CharacterBase::GameOver()
 {
+    UGameplayStatics::PlaySound2D(GetWorld(), ImposterWinSound);
+
     bDie = true;
+    GetCharacterMovement()->GravityScale = 0.0f;
+    SetActorLocation(FVector(-1200, 20, 500));
+    SetActorRotation(FRotator::ZeroRotator);
+}
+
+void AGK_CharacterBase::GameWin()
+{
+    UGameplayStatics::PlaySound2D(GetWorld(), CrewWinSound);
+
+    bWin = true;
+    // 우주로 안나가도록 나중에 수정 예정
     GetCharacterMovement()->GravityScale = 0.0f;
     SetActorLocation(FVector(-1200, 20, 500));
     SetActorRotation(FRotator::ZeroRotator);

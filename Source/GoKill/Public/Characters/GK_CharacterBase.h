@@ -22,16 +22,27 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-    int PlayerId = -1;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Sound)
+    class USoundWave* ImposterWinSound;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Sound)
+    class USoundWave* CrewWinSound;
+
     bool bDie = false;
+    bool bWin = false;
+
+    int PlayerId = -1;
 
     TArray<MissionInfo> MissionList;
+
+public:
     CharacterState GetState();
     void SetState(CharacterState state_);
     CharacterMission GetMission();
     void SetMission(CharacterMission mission_);
 
     void GameOver();
+    void GameWin();
 
 protected:
 	CharacterState State;

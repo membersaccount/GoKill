@@ -18,6 +18,7 @@ private:
     int MissionListIdx = -1;
     
     class AGK_Player* activePlayer;
+
 public:
 	MissionHandler();
 	~MissionHandler();

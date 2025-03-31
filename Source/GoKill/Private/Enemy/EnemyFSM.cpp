@@ -73,13 +73,11 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
         break;
     }
 
-
-
-    if (Anim->bAttackPlay && bOverlap && OverlapPlayer != nullptr && !OverlapPlayer->bDie) {
-        // 사망 효과음
-
-        // 퇴출
-        OverlapPlayer->GameOver();
+    if (Anim->bAttackPlay && bOverlap && OverlapPlayer != nullptr) {
+        if (!OverlapPlayer->bDie && !OverlapPlayer->bWin) {
+            // 퇴출
+            OverlapPlayer->GameOver();
+        }
     }
 }
 
