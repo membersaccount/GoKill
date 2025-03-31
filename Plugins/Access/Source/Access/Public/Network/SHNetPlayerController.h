@@ -33,8 +33,7 @@ public:
 
 public: // Vote
     void SendVoteData(int id_);
-    void ApplyVoteResult();
-    void KickPlayer();
+    void KilledPlayer();
 
 public: // Mission
     void SendMissionClear(int missionId_);
@@ -46,6 +45,9 @@ public:
 	std::mutex movementMutex;
 	std::queue<Packet::Payload::MOVEMENT> movementWorks;
 	int cachedID;
+    int baseIndex;
+    std::queue<int> killWorks;
+    std::atomic<int> updateIndex = -1;
 
 private:
 	std::unordered_map<int, ACharacter*> otherPlayers;
@@ -56,6 +58,7 @@ private:
 
 	UPROPERTY()
 	TSubclassOf<ACharacter> otherCharacter;
+    TArray<TSubclassOf<ACharacter>> otherCharacters;
 
 	Packet::Header::DEFAULT header;
 	Packet::Payload::MOVEMENT movement;

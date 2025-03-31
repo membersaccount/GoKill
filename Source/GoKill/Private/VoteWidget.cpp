@@ -3,6 +3,7 @@
 
 #include "VoteWidget.h"
 #include "Components/Button.h"
+#include "Network/SHNetPlayerController.h"
 
 void UVoteWidget::NativeConstruct()
 {
@@ -18,20 +19,45 @@ void UVoteWidget::NativeConstruct()
 
 void UVoteWidget::PressedBtn1()
 {
+    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
+    if (controller)
+    {
+        controller->SendVoteData(0);
+    }
 }
 
 void UVoteWidget::PressedBtn2()
 {
+    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
+    if (controller)
+    {
+        controller->SendVoteData(1);
+    }
 }
 
 void UVoteWidget::PressedBtn3()
 {
+    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
+    if (controller)
+    {
+        controller->SendVoteData(2);
+    }
 }
 
 void UVoteWidget::PressedBtn4()
 {
+    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
+    if (controller)
+    {
+        controller->SendVoteData(3);
+    }
 }
 
 void UVoteWidget::PressedBtn5()
 {
+    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
+    if (controller)
+    {
+        controller->SendVoteData(4);
+    }
 }

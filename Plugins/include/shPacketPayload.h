@@ -16,12 +16,14 @@ namespace Packet
 
 		struct NEWPLAYER	// Type 1
 		{
-			uint32_t id;
+			int id;
+			int index;
 		};
 
 		struct MOVEMENT		// Type 2
 		{
 			int id;
+			int index;
 			float x;
 			float y;
 			float z;
@@ -39,22 +41,31 @@ namespace Packet
             int idTarget;
         };
 
-        struct VOTE_RESULT      // Type 4
+        struct KILL      // Type 4
         {
-            int idKick;
-        };
+            int idKill;
+        };		
 
-        struct MISSION_PROCESS_DATA      // Type 5 -> 나중에 RPC나 API 호출로 변경
+        struct MISSION_PROCESS_DATA      // Type 5
         {
             int id;
             int missionId;
         };
 
-        struct IMPOSTER_KILL        // Type 6
-        {
-            int id;
-            int idKilled;
-        };
+        //struct KILL        // Type 6
+        //{
+        //    int idKilled;
+        //};
+
+		struct LEAVE_GAME	// 7
+		{
+			int id;
+		};
+
+		struct GAME_START	// 8
+		{
+			bool gameStart;
+		};
 	}
 }
 #pragma pack()

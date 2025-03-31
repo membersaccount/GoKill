@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
@@ -21,6 +21,7 @@ public:
 public:
 	SOCKET* cachedSocket;
 	int clientID;
+    int baseIndex;
 
 	HWND console;
 

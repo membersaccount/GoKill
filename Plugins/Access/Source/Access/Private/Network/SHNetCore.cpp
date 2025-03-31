@@ -156,9 +156,11 @@ void SHNetCore::RecvThread()
 				recvBuffer.Read(cpyBuffer + sizeof(Packet::Header::DEFAULT), header->size - sizeof(Packet::Header::DEFAULT));
 				Packet::Payload::NEWPLAYER* newPlayerData = reinterpret_cast<Packet::Payload::NEWPLAYER*>(cpyBuffer + sizeof(Packet::Header::DEFAULT));
 
-				printf("Recv Packet: Header Type=%d, Size=%d, Data ID=%d\n", header->type, header->size, newPlayerData->id);
+				printf("Recv Packet: Header Type=%d, Size=%d, Data ID=%d, Index=%d\n", header->type, header->size, newPlayerData->id, newPlayerData->index);
 
 				cachedGameInstance->clientID = newPlayerData->id;
+                //cachedGameInstance->baseIndex = newPlayerData->index;
+                cachedController->updateIndex = newPlayerData->index;
 			}
 			break;
 			case 2:
@@ -191,7 +193,15 @@ void SHNetCore::RecvThread()
             break;
             case 4:
             {
+                printf("[Debug]: case 4: Try to Read Packet: Header Type=%d, Size=%d\n", header->type, header->size);
 
+                recvBuffer.Read(cpyBuffer + sizeof(Packet::Header::DEFAULT), header->size - sizeof(Packet::Header::DEFAULT));
+                Packet::Payload::KILL* killData = reinterpret_cast<Packet::Payload::KILL*>(cpyBuffer + sizeof(Packet::Header::DEFAULT));
+
+                printf("Recv Packet: Header Type=%d, Size=%d, KilledID=%d\n", header->type, header->size, killData->idKill);
+
+                std::lock_guard<std::mutex> lock(cachedController->movementMutex);
+                cachedController->killWorks.push(killData->idKill);
             }
             break;
             case 5:
