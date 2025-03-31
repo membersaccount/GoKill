@@ -19,45 +19,41 @@ void UVoteWidget::NativeConstruct()
 
 void UVoteWidget::PressedBtn1()
 {
-    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
-    if (controller)
-    {
-        controller->SendVoteData(0);
-    }
+    SendVote(0);
 }
 
 void UVoteWidget::PressedBtn2()
 {
-    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
-    if (controller)
-    {
-        controller->SendVoteData(1);
-    }
+    SendVote(1);
 }
 
 void UVoteWidget::PressedBtn3()
 {
-    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
-    if (controller)
-    {
-        controller->SendVoteData(2);
-    }
+    SendVote(2);
 }
 
 void UVoteWidget::PressedBtn4()
 {
-    ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
-    if (controller)
-    {
-        controller->SendVoteData(3);
-    }
+    SendVote(3);
 }
 
 void UVoteWidget::PressedBtn5()
 {
+    SendVote(4);
+}
+
+void UVoteWidget::SendVote(int id_)
+{
+    if (hadVoted)
+    {
+        return;
+    }
+
     ASHNetPlayerController* controller = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
     if (controller)
     {
-        controller->SendVoteData(4);
+        controller->SendVoteData(id_);
     }
+
+    hadVoted = true;
 }
