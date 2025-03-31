@@ -65,6 +65,7 @@ namespace Packet
 		struct GAME_START	// 8
 		{
 			bool gameStart;
+			bool isImposter;
 		};
 	}
 }

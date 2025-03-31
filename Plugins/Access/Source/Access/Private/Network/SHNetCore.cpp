@@ -207,6 +207,17 @@ void SHNetCore::RecvThread()
             case 5:
                 printf("Recv Packet type (MISSION_PROCESS_DATA) not allowed");
             break;
+            case 8:
+            {
+                printf("[Debug]: case 8: Try to Read Packet: Header Type=%d, Size=%d\n", header->type, header->size);
+                recvBuffer.Read(cpyBuffer + sizeof(Packet::Header::DEFAULT), header->size - sizeof(Packet::Header::DEFAULT));
+                Packet::Payload::GAME_START* gameStartData = reinterpret_cast<Packet::Payload::GAME_START*>(cpyBuffer + sizeof(Packet::Header::DEFAULT));
+                printf("Recv Packet: Header Type=%d, Size=%d, Data IsGameStart=%d, IsImposter=%d\n", header->type, header->size, gameStartData->gameStart, gameStartData->isImposter);
+
+                cachedController->isGameStart = gameStartData->gameStart;
+                cachedController->isImposter = gameStartData->isImposter;
+            }
+            break;
 			default:
 				printf("Unknown Packet Type\n");
 				break;
