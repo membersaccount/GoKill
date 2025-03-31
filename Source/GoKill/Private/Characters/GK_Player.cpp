@@ -128,7 +128,7 @@ void AGK_Player::Move(const FInputActionValue& Value)
 
     FVector dir = FollowCamera->GetForwardVector() * MovementVector.X + FollowCamera->GetRightVector() * MovementVector.Y;
     FollowCamera->GetComponentTransform().TransformVector(dir);
-    AddMovementInput(dir);
+    AddMovementInput(FVector(dir.X, dir.Y, 0.0f));
 }
 
 void AGK_Player::Look(const FInputActionValue& Value)
