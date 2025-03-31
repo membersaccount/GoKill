@@ -159,8 +159,8 @@ void AMission::MissionFocusOn()
     */
 
     activePlayer->SetActorRotation(MissionDir.Rotation());
-    auto pc = Cast<APlayerController>(activePlayer->GetController());
-    pc->SetControlRotation(MissionDir.Rotation());
+    //auto pc = Cast<APlayerController>(activePlayer->GetController());
+    //pc->SetControlRotation(MissionDir.Rotation());
 }
 
 int32 AMission::GetMissionId()
