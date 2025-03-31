@@ -5,6 +5,7 @@
 #include "Engine/SkeletalMesh.h"
 #include "Animation/AnimInstance.h"
 #include "Enemy/EnemyFSM.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -31,6 +32,14 @@ AEnemy::AEnemy()
         GetMesh()->SetAnimInstanceClass(TempAnim.Class);
     }
 
+    RightLegCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("RightLegCollision"));
+    RightLegCollision->SetupAttachment(GetMesh());
+
+    RightLegCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    RightLegCollision->SetCollisionObjectType(ECC_Pawn);
+    RightLegCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+    RightLegCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
     // EnemyFSM 컴포넌트 추가
     fsm = CreateDefaultSubobject<UEnemyFSM>(TEXT("FSM"));
 
@@ -43,7 +52,6 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

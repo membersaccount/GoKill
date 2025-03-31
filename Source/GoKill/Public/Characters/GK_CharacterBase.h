@@ -23,11 +23,15 @@ public:
 
 public:
     int PlayerId = -1;
+    bool bDie = false;
+
     TArray<MissionInfo> MissionList;
     CharacterState GetState();
     void SetState(CharacterState state_);
     CharacterMission GetMission();
     void SetMission(CharacterMission mission_);
+
+    void GameOver();
 
 protected:
 	CharacterState State;

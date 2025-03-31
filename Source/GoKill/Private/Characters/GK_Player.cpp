@@ -119,7 +119,7 @@ void AGK_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void AGK_Player::Move(const FInputActionValue& Value)
 {
-	if (Controller == nullptr)
+	if (Controller == nullptr) // || bDie
 	{
 		return;
 	}

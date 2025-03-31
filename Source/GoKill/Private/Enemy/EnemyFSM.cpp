@@ -9,6 +9,10 @@
 #include "NavigationSystem.h"
 #include "Runtime/AIModule/Classes/AIController.h"
 #include "Runtime/AIModule/Classes/Navigation/PathFollowingComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/BoxComponent.h"
+#include "shDebug.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -41,6 +45,9 @@ void UEnemyFSM::BeginPlay()
 
     // AIController 할당하기
     ai = Cast<AAIController>(me->GetController());
+    
+    me->RightLegCollision->OnComponentBeginOverlap.AddDynamic(this, &UEnemyFSM::OnLegOverlap);
+    me->RightLegCollision->OnComponentEndOverlap.AddDynamic(this, &UEnemyFSM::OnLegOverlapEnd);
 }
 
 
@@ -65,6 +72,15 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
     default:
         break;
     }
+
+
+
+    if (Anim->bAttackPlay && bOverlap && OverlapPlayer != nullptr && !OverlapPlayer->bDie) {
+        // 사망 효과음
+
+        // 퇴출
+        OverlapPlayer->GameOver();
+    }
 }
 
 void UEnemyFSM::IdleState()
@@ -82,7 +98,7 @@ void UEnemyFSM::IdleState()
         // 경과 시간 초기화
         currentTime = 0.0f;
 
-        GetRandomPositionNavMesh(me->GetActorLocation(), 500.0f, randomPos);
+        GetRandomPositionNavMesh(me->GetActorLocation(), 300.0f, randomPos);
 
     }
 }
@@ -112,7 +128,7 @@ void UEnemyFSM::MoveState()
     FPathFindingResult r = ns->FindPathSync(query);
 
     // 목적지까지 길 찾기 성공 여부 확인
-    if (r.Result == ENavigationQueryResult::Success) {
+    if (r.Result == ENavigationQueryResult::Success && dir.Size() < 600) {
         // 타겟으로 이동
         ai->MoveToLocation(destination);
     }
@@ -123,12 +139,12 @@ void UEnemyFSM::MoveState()
         // 목적지에 도착하면
         if (result == EPathFollowingRequestResult::AlreadyAtGoal) {
             // 새로운 랜덤 위치 가져오기
-            GetRandomPositionNavMesh(me->GetActorLocation(), 500.0f, randomPos);
+            GetRandomPositionNavMesh(me->GetActorLocation(), 300.0f, randomPos);
         }
     }
 
     // 타겟과 거리가 attackRange 이내면 && 타겟이 전방에 존재하면 공격상태로 전환
-    if (dir.Size() <= attackRange && GetPlayerLocationAngle() < 90) {
+    if (dir.Size() <= attackRange) {
         ai->StopMovement();
 
         mState = EEnemyState::Attack;
@@ -144,18 +160,19 @@ void UEnemyFSM::AttackState()
     if (currentTime >= attackDelayTime) {
         currentTime = 0.0f;
         Anim->bAttackPlay = true;
+        return;
     }
 
     // 타겟과의 거리
     float distance = FVector::Distance(target->GetActorLocation(), me->GetActorLocation());
 
-    // 공격 범위를 넘어서면 || 타겟이 전방에 있지 않으면 Move 상태로 전환
-    if (distance > attackRange || GetPlayerLocationAngle() >= 90) {
+    // 공격 범위를 넘어서면
+    if (distance > attackRange) {
         currentTime = 0.0f;
         mState = EEnemyState::Move;
         Anim->animState = mState;
 
-        GetRandomPositionNavMesh(me->GetActorLocation(), 500.0f, randomPos);
+        GetRandomPositionNavMesh(me->GetActorLocation(), 300.0f, randomPos);
     }
 }
 
@@ -188,5 +205,21 @@ float UEnemyFSM::GetPlayerLocationAngle()
     float AngleDegree = FMath::RadiansToDegrees(AcosAngle);
 
     return AngleDegree;
+}
+
+void UEnemyFSM::OnLegOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    if (OtherActor->IsA<AGK_Player>()) {
+        bOverlap = true;
+        OverlapPlayer = Cast<AGK_Player>(OtherActor);
+    }
+}
+
+void UEnemyFSM::OnLegOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+    if (OtherActor->IsA<AGK_Player>()) {
+        bOverlap = false;
+        OverlapPlayer = nullptr;
+    }
 }
 

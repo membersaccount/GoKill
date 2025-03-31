@@ -1,4 +1,5 @@
 ﻿#include "Characters/GK_CharacterBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AGK_CharacterBase::AGK_CharacterBase()
 {
@@ -40,5 +41,13 @@ CharacterMission AGK_CharacterBase::GetMission()
 void AGK_CharacterBase::SetMission(CharacterMission mission_)
 {
     MissionProgress = mission_;
+}
+
+void AGK_CharacterBase::GameOver()
+{
+    bDie = true;
+    GetCharacterMovement()->GravityScale = 0.0f;
+    SetActorLocation(FVector(-1200, 20, 500));
+    SetActorRotation(FRotator::ZeroRotator);
 }
 

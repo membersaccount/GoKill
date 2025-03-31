@@ -29,4 +29,7 @@ public:
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=FSMComponent)
 	class UEnemyFSM* fsm;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    class UBoxComponent* RightLegCollision;
 };

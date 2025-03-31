@@ -64,7 +64,7 @@ public:
 
 	// 공격 범위
 	UPROPERTY(EditAnywhere, Category=FSM)
-	float attackRange = 100.0f;
+	float attackRange = 80.0f;
 
 	// 공격 대기 시간
 	UPROPERTY(EditAnywhere, Category=FSM)
@@ -88,5 +88,13 @@ public:
 	void OnAttackEnd();
 
     float GetPlayerLocationAngle();
+
+    UFUNCTION()
+	void OnLegOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 		
+    UFUNCTION()
+	void OnLegOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+    bool bOverlap = false;
+    class AGK_Player* OverlapPlayer;
 };

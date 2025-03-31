@@ -56,6 +56,15 @@ void MissionHandler::MissionClear()
     activePlayer->MissionList[MissionListIdx].Completed = true;
 
     MissionListIdx = -1;
+
+    bool AllClear = true;
+    for (auto b : activePlayer->MissionList) {
+        if(!b.Completed) AllClear = false;
+        FString txt = b.Name + (b.Completed ? TEXT("(End)") : TEXT("(Ready)"));
+        Print(txt, FColor::Green);
+    }
+    // 이 부분 나중에 수정 필요
+    if(AllClear) activePlayer->GameOver();
 }
 
 void MissionHandler::MissionHandoutAll(TArray<AGK_Player*> players, int numOfMissions)

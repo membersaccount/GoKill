@@ -101,8 +101,8 @@ void AUnlockManifolds::OnMissionOverlap(UPrimitiveComponent* OverlappedComponent
 	bool missionStart = OverlapEventBegin(OtherActor);
 
     if (missionStart) {
-        // 카메라 미션 쪽으로 돌리기
-	    MissionFocusOn();
+        // 카메라 미션 쪽으로 돌리기 -> 현재 버그 발생 중
+	    //MissionFocusOn();
 
         // 마우스 버전
         if(bUseMouse) {
