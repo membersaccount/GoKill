@@ -209,6 +209,7 @@ float UEnemyFSM::GetPlayerLocationAngle()
 void UEnemyFSM::OnLegOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
     if (OtherActor->IsA<AGK_Player>()) {
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(), KillSound, me->GetActorLocation(), 1.0f, 1.0f, 0.0f, Attenuation, Concurrency);
         bOverlap = true;
         OverlapPlayer = Cast<AGK_Player>(OtherActor);
     }

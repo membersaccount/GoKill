@@ -84,6 +84,8 @@ void AUnlockManifolds::Tick(float DeltaTime)
                 }), WaitingTime, true);
             }
 
+            BtnWidget->bSuccess = false;
+            bSuccess = false;
             Print("Mission Success", FColor::Blue);
         }
     }

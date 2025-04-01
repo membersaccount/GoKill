@@ -97,4 +97,13 @@ public:
 
     bool bOverlap = false;
     class AGK_Player* OverlapPlayer;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sound")
+    class USoundWave* KillSound;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    class USoundAttenuation* Attenuation;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+    class USoundConcurrency* Concurrency;
 };
