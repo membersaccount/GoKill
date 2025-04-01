@@ -19,7 +19,7 @@ MissionHandler::MissionHandler()
     manifolds.Id = 2;
     manifolds.Name = "Unlock Manifolds";
 
-    MissionDataList = { scan, manifolds, manifolds };
+    MissionDataList = { manifolds, scan };
     //*/
 }
 
@@ -57,11 +57,13 @@ void MissionHandler::MissionClear()
 
     MissionListIdx = -1;
 
+    activePlayer->SetSystemMissionList();
+
     bool AllClear = true;
     for (auto b : activePlayer->MissionList) {
         if(!b.Completed) AllClear = false;
-        FString txt = b.Name + (b.Completed ? TEXT("(End)") : TEXT("(Ready)"));
-        Print(txt, FColor::Green);
+        //FString txt = b.Name + (b.Completed ? TEXT("(End)") : TEXT("(Ready)"));
+        //Print(txt, FColor::Green);
     }
 
     if(AllClear) {
@@ -84,6 +86,7 @@ void MissionHandler::MissionHandoutAll(TArray<AGK_Player*> players, int numOfMis
             int randIdx = FMath::RandRange(0, MissionCount - 1);
             pl->MissionList.Add(MissionDataList[randIdx]);
         }
+        pl->SetSystemMissionList();
     }
 }
 
@@ -100,6 +103,8 @@ void MissionHandler::MissionHandout(class AGK_Player* player, int numOfMissions)
         int randIdx = FMath::RandRange(0, MissionCount - 1);
         player->MissionList.Add(MissionDataList[randIdx]);
     }
+
+    player->SetSystemMissionList();
 }
 
 void MissionHandler::SetMissionDataList(UWorld* world)

@@ -31,11 +31,23 @@ public:
 	void Grab(const FInputActionValue& Value);
 	void Select(const FInputActionValue& Value);
     void ReleaseSelect(const FInputActionValue& value);
+    void SystemWindow(const FInputActionValue& value);
 
 public: // Camera Settings
     UCameraComponent* GetPlayerCamera();
     FVector GetCameraLocation();
     void SetCameraRotation(FRotator CameraRotation_);
+
+public: // 시스템 창
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Widget")
+	class UWidgetComponent* MainComp;
+
+    UPROPERTY()
+	class UMainWidget* MainWidget;
+
+    bool bSystemOpen = false;
+
+    void SetSystemMissionList();
 
 private:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -74,6 +86,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* SelectAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SystemAction;
 
     MissionHandler missions;
 

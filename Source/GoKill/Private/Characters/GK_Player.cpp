@@ -13,6 +13,8 @@
 #include "../../../../Plugins/Runtime/XRBase/Source/XRBase/Public/HeadMountedDisplayFunctionLibrary.h"
 #include "Network/SHNetPlayerController.h"
 #include "Components/WidgetInteractionComponent.h"
+#include "MainWidget.h"
+#include "Components/WidgetComponent.h"
 
 AGK_Player::AGK_Player()
 {
@@ -56,6 +58,18 @@ AGK_Player::AGK_Player()
 
     WidgetInteractionComp = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteractionComp"));
     WidgetInteractionComp->SetupAttachment(RightAim);
+
+    // UWidgetComponent
+    MainComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("MainWidget"));
+    MainComp->SetupAttachment(FollowCamera);
+
+    ConstructorHelpers::FClassFinder<UMainWidget> TempWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/RGY/UI/WBP_MainUI.WBP_MainUI_C'"));
+    if (TempWidget.Succeeded()) {
+        MainComp->SetWidgetClass(TempWidget.Class);
+        MainComp->SetRelativeLocation(FVector(30, 0, 0));
+        MainComp->SetRelativeRotation(FRotator(0, 180, 0));
+        MainComp->SetRelativeScale3D(FVector(0.05f));
+    }
 }
 
 void AGK_Player::BeginPlay()
@@ -75,10 +89,17 @@ void AGK_Player::BeginPlay()
     //MissionHandler* mHandler = new MissionHandler();
     //mHandler->MissionHandout(this, 4)
 
+    if (MainComp != nullptr) {
+        MainWidget = Cast<UMainWidget>(MainComp->GetUserWidgetObject());
+        if(MainWidget != nullptr) MainWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+
     ASHNetPlayerController* PC = Cast<ASHNetPlayerController>(GetWorld()->GetFirstPlayerController());
     if (!PC)
         return;
     PC->SendVoteData(1);
+
+    SetSystemMissionList();
 }
 
 void AGK_Player::Tick(float DeltaTime)
@@ -115,6 +136,7 @@ void AGK_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Started, this, &AGK_Player::Select);
 	EnhancedInputComponent->BindAction(SelectAction, ETriggerEvent::Completed, this, &AGK_Player::ReleaseSelect);
     EnhancedInputComponent->BindAction(TestKill_Action, ETriggerEvent::Started, this, &AGK_Player::TestKill);
+    EnhancedInputComponent->BindAction(SystemAction, ETriggerEvent::Started, this, &AGK_Player::SystemWindow);
 }
 
 void AGK_Player::Move(const FInputActionValue& Value)
@@ -160,6 +182,13 @@ void AGK_Player::ReleaseSelect(const FInputActionValue& value)
     WidgetInteractionComp->ReleasePointerKey(EKeys::LeftMouseButton);
 }
 
+void AGK_Player::SystemWindow(const FInputActionValue& value)
+{
+    bSystemOpen = !bSystemOpen;
+    
+    MainWidget->SetVisibility(bSystemOpen ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+}
+
 UCameraComponent* AGK_Player::GetPlayerCamera()
 {
     return FollowCamera;
@@ -173,6 +202,12 @@ FVector AGK_Player::GetCameraLocation()
 void AGK_Player::SetCameraRotation(FRotator CameraRotation_)
 {
     FollowCamera->SetWorldRotation(CameraRotation_);
+}
+
+void AGK_Player::SetSystemMissionList()
+{
+    if(MainWidget == nullptr) return;
+    MainWidget->SetMissionList(MissionList);
 }
 
 void AGK_Player::TestKill(const FInputActionValue& Value)

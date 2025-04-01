@@ -145,6 +145,7 @@ void UEnemyFSM::MoveState()
     if (dir.Size() <= attackRange) {
         ai->StopMovement();
 
+        currentTime = 0.0f;
         mState = EEnemyState::Attack;
         Anim->animState = mState;
         Anim->bAttackPlay = true;

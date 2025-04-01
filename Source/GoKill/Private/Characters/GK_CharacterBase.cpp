@@ -50,7 +50,7 @@ void AGK_CharacterBase::GameOver()
 
     bDie = true;
     GetCharacterMovement()->GravityScale = 0.0f;
-    SetActorLocation(FVector(-1200, 20, 500));
+    SetActorLocation(FVector(-1200, 20, 600));
     SetActorRotation(FRotator::ZeroRotator);
 }
 
@@ -61,7 +61,7 @@ void AGK_CharacterBase::GameWin()
     bWin = true;
     // 우주로 안나가도록 나중에 수정 예정
     GetCharacterMovement()->GravityScale = 0.0f;
-    SetActorLocation(FVector(-1200, 20, 500));
+    SetActorLocation(FVector(-1200, 20, 600));
     SetActorRotation(FRotator::ZeroRotator);
 }
 

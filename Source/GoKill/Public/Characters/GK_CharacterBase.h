@@ -45,6 +45,6 @@ public:
     void GameWin();
 
 protected:
-	CharacterState State;
+	CharacterState State = CharacterState::CrewMember;
 	CharacterMission MissionProgress;
 };
